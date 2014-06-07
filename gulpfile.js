@@ -1,29 +1,29 @@
 var gulp = require('gulp');
-    sass = require('gulp-ruby-sass'),
     gutil = require('gulp-util')
     coffee = require('gulp-coffee');
+    watch = require('gulp-watch');
+    merge = require('merge-stream');
 
-gulp.task('styles', function() {
-  return gulp.src(['css/**/*.scss', '!css/**/_*.scss'])
-    .pipe(sass({loadPath: ['css/']}).on('error', gutil.log))
-    // .pipe(sass({includePaths: ['css/'], errLogToConsole: true})) // this work with gulp-sass, which is quicker but less reliable
-    .pipe(gulp.dest('css/'));
+
+gulp.task('compile', function() {
+  return merge(
+          gulp.src('./development/server/**/*.coffee')
+          .pipe(watch())
+          .pipe(coffee({bare: true}).on('error', gutil.log))
+          .pipe(gulp.dest('./build/server/')),
+          gulp.src(['./development/server/**/*', '!./development/server/**/*.coffee'])
+          .pipe(watch())
+          .pipe(gulp.dest('./build/server/views/'))
+        );
 });
 
-gulp.task('coffee', function() {
-  gulp.src('./js/**/*.coffee')
-      .pipe(coffee().on('error', gutil.log))
-      .pipe(gulp.dest('./js'));
-});
 
-gulp.task('watch', function() {
-    gulp.watch('./js/**/*.coffee', function(event) {
-      console.log('File '+event.path+' was '+event.type+', running tasks...');
-      gulp.run('coffee');
-    });
-
-    gulp.watch(['css/**/*.scss', '!css/**/_*.scss'], function(event) {
-      console.log('File '+event.path+' was '+event.type+', running tasks...');
-      gulp.run('styles');
-    });
+gulp.task('compile', function() {
+  return merge(
+          gulp.src('./development/server/**/*.coffee')
+          .pipe(coffee({bare: true}).on('error', gutil.log))
+          .pipe(gulp.dest('./build/server/')),
+          gulp.src(['./development/server/**/*', '!./development/server/**/*.coffee'])
+          .pipe(gulp.dest('./build/server/'))
+        );
 });

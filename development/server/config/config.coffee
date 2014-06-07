@@ -5,7 +5,7 @@ _ = require("lodash")
 
 # Load configurations
 # Set the node environment variable if not set before
-process.env.NODE_ENV = if process.env.NODE_ENV in ["dev", "production", "staging", "test"]  process.env.NODE_ENV else "dev"
+process.env.NODE_ENV = if process.env.NODE_ENV in ["dev", "production", "staging", "test"] then process.env.NODE_ENV else "dev"
 
 # Extend the base configuration in all.js with environment
 # specific configuration

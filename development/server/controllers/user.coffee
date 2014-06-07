@@ -5,6 +5,8 @@ nodemailer = require("nodemailer")
 passport = require("passport")
 User = require("../models/User")
 secrets = require("../config/secrets")
+config = require("../config/config")
+ejs = require('ejs')
 
 ###
 GET /login
@@ -284,8 +286,8 @@ exports.postReset = (req, res, next) ->
       )
       mailOptions =
         to: user.email
-        from: "hackathon@starter.com"
-        subject: "Your Hackathon Starter password has been changed"
+        from: config.mailer.defaulFromAddress
+        subject: "Your password has been changed"
         text: "Hello,\n\n" + "This is a confirmation that the password for your account " + user.email + " has just been changed.\n"
 
       smtpTransport.sendMail mailOptions, (err) ->
@@ -359,9 +361,9 @@ exports.postForgot = (req, res, next) ->
       )
       mailOptions =
         to: user.email
-        from: "hackathon@starter.com"
-        subject: "Reset your password on Hackathon Starter"
-        text: "You are receiving this email because you (or someone else) have requested the reset of the password for your account.\n\n" + "Please click on the following link, or paste this into your browser to complete the process:\n\n" + "http://" + req.headers.host + "/reset/" + token + "\n\n" + "If you did not request this, please ignore this email and your password will remain unchanged.\n"
+        from: config.mailer.defaulFromAddress
+        subject: "Reset your password "
+        text: ejs.render('email/forgot/text.ejs', {'app_url': req.header.host + '/reset', 'token': token})
 
       smtpTransport.sendMail mailOptions, (err) ->
         req.flash "info",

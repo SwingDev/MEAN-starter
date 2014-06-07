@@ -60,8 +60,8 @@ Express configuration.
 ###
 app.set "port", process.env.PORT or 3000
 
-# app.set('views', path.join(__dirname, 'views'));
-# app.set('view engine', 'jade');
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
 app.use compress()
 app.use logger("dev")
 app.use bodyParser.json()

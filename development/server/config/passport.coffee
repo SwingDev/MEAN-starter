@@ -1,8 +1,6 @@
 _ = require("lodash")
 passport = require("passport")
 LocalStrategy = require("passport-local").Strategy
-OAuthStrategy = require("passport-oauth").OAuthStrategy # Tumblr
-OAuth2Strategy = require("passport-oauth").OAuth2Strategy # Venmo, Foursquare
 User = require("../models/User")
 secrets = require("./secrets")
 passport.serializeUser (user, done) ->

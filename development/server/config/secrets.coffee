@@ -17,7 +17,6 @@ refer to https://help.github.com/articles/remove-sensitive-data
 ###
 
 module.exports =
-  db: process.env.MONGODB or "mongodb://localhost:27017/mean"
   sessionSecret: process.env.SESSION_SECRET or "Your Session Secret goes here"
   mailgun:
     user: process.env.MAILGUN_USER or "MAILGUN_USER"

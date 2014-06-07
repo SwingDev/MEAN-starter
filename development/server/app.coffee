@@ -28,6 +28,7 @@ userController = require("./controllers/user")
 API keys and Passport configuration.
 ###
 secrets = require("./config/secrets")
+config = require("./config/config")
 passportConf = require("./config/passport")
 
 ###
@@ -38,7 +39,7 @@ app = express()
 ###
 Connect to MongoDB.
 ###
-mongoose.connect secrets.db
+mongoose.connect config.db
 mongoose.connection.on "error", ->
   console.error "MongoDB Connection Error. Make sure MongoDB is running."
   return
@@ -72,7 +73,7 @@ app.use cookieParser()
 app.use session(
   secret: secrets.sessionSecret
   store: new MongoStore(
-    url: secrets.db
+    url: config.db
     auto_reconnect: true
   )
 )

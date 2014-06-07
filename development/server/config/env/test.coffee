@@ -1,1 +1,2 @@
-process.env.MONGODB = "mongodb://localhost:27017/mean-test"
+module.exports =
+  db: process.env.MONGODB or "mongodb://localhost:27017/mean_test"

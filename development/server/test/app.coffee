@@ -1,5 +1,5 @@
 request = require("supertest")
-app = require("../app")
+app = require("../app").app
 utils = require('./utils')
 
 describe "GET /", ->

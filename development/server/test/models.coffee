@@ -1,6 +1,7 @@
 chai = require("chai")
 should = chai.should()
 User = require("../models/User")
+utils = require('./utils')
 describe "User Model", ->
   it "should create a new user", (done) ->
     user = new User(

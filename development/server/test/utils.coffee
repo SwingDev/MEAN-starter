@@ -13,10 +13,10 @@ mongoose = require("mongoose")
 beforeEach (done) ->
   clearDB = ->
     for i of mongoose.connection.collections
-      mongoose.connection.collections[i].remove()
+      mongoose.connection.collections[i].remove((err, numberOfRemovedDocs) -> )
     done()
   reconnect = ->
-    mongoose.connect config.db.test, (err) ->
+    mongoose.connect config.db, (err) ->
       throw err  if err
       clearDB()
 

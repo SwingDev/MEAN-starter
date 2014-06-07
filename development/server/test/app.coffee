@@ -1,6 +1,6 @@
 # request = require("supertest")
-# app = require("../app").app
-# utils = require('./utils')
+# app = require("../app")
+# # utils = require('./utils')
 
 # describe "GET /", ->
 #   it "should return 200 OK", (done) ->

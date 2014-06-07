@@ -21,10 +21,9 @@ describe "User Model", ->
       password: "password"
     )
     user.save (err) ->
-      err.code.should.equal 11000  if err
+      err.code.should.equal 11000
       done()
       return
-
     return
 
   it "should find user by email", (done) ->

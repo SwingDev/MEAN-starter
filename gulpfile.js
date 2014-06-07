@@ -5,7 +5,7 @@ var gulp = require('gulp');
     merge = require('merge-stream');
 
 
-gulp.task('compile', function() {
+gulp.task('watch', function() {
   return merge(
           gulp.src('./development/server/**/*.coffee')
           .pipe(watch())
@@ -13,7 +13,7 @@ gulp.task('compile', function() {
           .pipe(gulp.dest('./build/server/')),
           gulp.src(['./development/server/**/*', '!./development/server/**/*.coffee'])
           .pipe(watch())
-          .pipe(gulp.dest('./build/server/views/'))
+          .pipe(gulp.dest('./build/server/'))
         );
 });
 

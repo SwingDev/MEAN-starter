@@ -1,5 +1,7 @@
 request = require("supertest")
-app = require("../app.js")
+app = require("../app")
+utils = require('./utils')
+
 describe "GET /", ->
   it "should return 200 OK", (done) ->
     request(app).get("/").expect 200, done

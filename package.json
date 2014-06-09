@@ -8,7 +8,7 @@
   "scripts": {
     "mongo": "mongod --dbpath .data/db/",
     "start": "node-dev build/server/app.js",
-    "test": "mocha"
+    "test": "mocha --reporter spec --timeout 2000 --recursive build/server"
   },
   "dependencies": {
     "async": "^0.9.0",

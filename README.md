@@ -15,4 +15,4 @@ We use brunch to build front-end stuff (`brunch watch`).
 We use gulp to compile backend coffee (`gulp watch`)
 
 ## Testing
-Go to `build/server/` and run `mocha` (assuming you have mocha globally installed).
+Run `npm test`

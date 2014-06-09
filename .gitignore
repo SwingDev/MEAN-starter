@@ -26,3 +26,7 @@ node_modules
 bower_components
 build
 .data
+.jenkins/reports/lcov-report
+.jenkins/reports/cobertura-coverage.xml
+.jenkins/reports/coverage.json
+.jenkins/reports/lcov.info

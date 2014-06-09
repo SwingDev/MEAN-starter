@@ -132,10 +132,11 @@ app.post "/account/delete", passportConf.isAuthenticated, userController.postDel
 app.use errorHandler()
 
 ###
-Start Express server.
+Start Express server if not testing.
 ###
-app.listen app.get("port"), ->
-  console.log "Express server listening on port %d in %s mode", app.get("port"), app.get("env")
-  return
+if process.env.NODE_ENV != 'test'
+  app.listen app.get("port"), ->
+    console.log "Express server listening on port %d in %s mode", app.get("port"), app.get("env")
+    return
 
 module.exports = app

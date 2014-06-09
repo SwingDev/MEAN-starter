@@ -1,7 +1,29 @@
 chai = require("chai")
 should = chai.should()
 User = require("../models/User")
-utils = require('./utils')
+
+process.env.NODE_ENV = "test"
+config = require("../config/config")
+mongoose = require("mongoose")
+
+
+before (done) ->
+  clearDB = ->
+    for i of mongoose.connection.collections
+      mongoose.connection.collections[i].remove((err, numberOfRemovedDocs) -> )
+  
+  mongoose.connect config.db, (err) ->
+    throw err if err
+    clearDB()
+    done()
+
+  return
+
+after (done) ->
+  mongoose.disconnect()
+  done()
+
+
 describe "User Model", ->
   it "should create a new user", (done) ->
     user = new User(
@@ -48,3 +70,7 @@ describe "User Model", ->
     return
 
   return
+
+# before (done) ->
+
+# after (done) ->

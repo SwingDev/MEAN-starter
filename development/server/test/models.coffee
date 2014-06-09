@@ -11,9 +11,14 @@ before (done) ->
   clearDB = ->
     for i of mongoose.connection.collections
       mongoose.connection.collections[i].remove((err, numberOfRemovedDocs) -> )
-  
-  mongoose.connect config.db, (err) ->
-    throw err if err
+
+  if mongoose.connection.readyState == 0
+    console.log('Trying to connect to mongoDB... ')
+    mongoose.connect config.db, (err) ->
+      throw err if err
+      clearDB()
+      done()
+  else
     clearDB()
     done()
 
@@ -71,6 +76,6 @@ describe "User Model", ->
 
   return
 
-# before (done) ->
+before (done) -> done()
 
-# after (done) ->
+after (done) -> done()

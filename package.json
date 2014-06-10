@@ -8,7 +8,8 @@
   "scripts": {
     "mongo": "mongod --dbpath .data/db/",
     "start": "node-dev build/server/app.js",
-    "test": "mocha --reporter spec --timeout 2000 --recursive build/server"
+    "test": "mocha --reporter spec --timeout 2000 --recursive build/server", 
+    "e2e_test": "mocha-casperjs --reporter=spec --recursive build/server/e2e_test/*"
   },
   "dependencies": {
     "async": "^0.9.0",
@@ -55,6 +56,7 @@
     "javascript-brunch": "~1.7.1",
     "merge-stream": "^0.1.1",
     "mocha": "^1.20.0",
+    "mocha-casperjs": "^0.4.4",
     "multiline": "^0.3.4",
     "node-dev": "^2.3.0",
     "sass-brunch": "~1.8.0",

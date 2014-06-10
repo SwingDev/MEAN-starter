@@ -8,20 +8,9 @@ secrets = require("../config/secrets")
 config = require("../config/config")
 ejs = require('ejs')
 
-###
-GET /login
-Login page.
-###
-exports.getLogin = (req, res) ->
-  return res.redirect("/")  if req.user
-  res.render "account/login",
-    title: "Login"
-
-  return
-
 
 ###
-POST /login
+POST /signin
 Sign in using email and password.
 @param email
 @param password

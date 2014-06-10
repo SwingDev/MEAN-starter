@@ -84,7 +84,7 @@ exports.postSignup = (req, res, next) ->
 
   user = new User(
     email: req.body.email
-    profile: {name: req.body.name}
+    profile: {name: req.body.name || ""}
     password: req.body.password
   )
 
@@ -145,15 +145,18 @@ exports.postForgot = (req, res, next) ->
         return
 
     (token, user, done) ->
-      smtpTransport = mailer.createSmtpTransport()
-      mailOptions =
-        to: user.email
-        from: config.mailer.defaulFromAddress
-        subject: "Reset your password "
-        text: swig.compileFile(path.join(__dirname, '../views/email/forgot/text.swig'))({'reset_url': req.host + '/reset_password', 'token': token})
+      if not (process.env.NODE_ENV in ['dev', 'test'])
+        smtpTransport = mailer.createSmtpTransport()
+        mailOptions =
+          to: user.email
+          from: config.mailer.defaulFromAddress
+          subject: "Reset your password "
+          text: swig.compileFile(path.join(__dirname, '../views/email/forgot/text.swig'))({'reset_url': req.host + '/reset_password', 'token': token})
 
-      smtpTransport.sendMail mailOptions, (err) ->
-        done err, token
+        smtpTransport.sendMail mailOptions, (err) ->
+          done err, token
+      else
+        done null, token
       
   ], (err, token) ->
     
@@ -162,7 +165,11 @@ exports.postForgot = (req, res, next) ->
       return
     else if err then next(err)
 
-    res.json(200, {"message": "Password reset email sent to " + req.body.email, "token": token})
+    if process.env.NODE_ENV == "test"
+      res.json(200, {"message": "Password reset email sent to " + req.body.email, "token": token})
+    else
+      console.log("Token: " + token)
+      res.json(200, {"message": "Password reset email sent to " + req.body.email})
     return
   
   return

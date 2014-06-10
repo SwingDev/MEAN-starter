@@ -32,3 +32,13 @@ Ng-inspector for your browser [ng-inspector](http://ng-inspector.org)
 Run `npm test`
 
 Run `npm run e2e_test`
+
+## User API
+Differences from express-user-couchdb:
+
+* No email verify.
+* No groups.
+* Single user attribute `isAdmin` giving user superpowers.
+
+### Brief summary of API methods
+Go to `routes/user.coffee` and look at the comments

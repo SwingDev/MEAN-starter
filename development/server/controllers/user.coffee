@@ -1,16 +1,16 @@
-_ = require("lodash")
-async = require("async")
-crypto = require("crypto")
+_          = require("lodash")
+async      = require("async")
+crypto     = require("crypto")
 nodemailer = require("nodemailer")
-passport = require("passport")
-User = require("../models/User")
-secrets = require("../config/secrets")
-config = require("../config/config")
-ejs = require('ejs')
+passport   = require("passport")
+User       = require("../models/User")
+secrets    = require("../config/secrets")
+config     = require("../config/config")
+ejs        = require('ejs')
 
 
 ###
-POST /signin
+POST /signin/
 Sign in using email and password.
 @param email
 @param password
@@ -39,7 +39,7 @@ exports.postLogin = (req, res, next) ->
   return
 
 ###
-GET /checklogin/
+GET /current/
 ###
 exports.isLoggedIn = (req, res, next) ->
   if req.isAuthenticated()
@@ -48,7 +48,7 @@ exports.isLoggedIn = (req, res, next) ->
     res.json(401, {})
 
 ###
-GET /logout
+POST /signout/
 Log out.
 ###
 exports.logout = (req, res) ->
@@ -58,7 +58,7 @@ exports.logout = (req, res) ->
 
 
 ###
-POST /signup
+POST /signup/
 Create a new local account.
 @param email
 @param password
@@ -103,6 +103,9 @@ exports.postSignup = (req, res, next) ->
 
   return
 
+###
+~~~~~~~~~~~~~~~~~~~~ Changed to API until this point ~~~~~~~~~~~~~~~~~~~~~~~
+###
 
 ###
 GET /account

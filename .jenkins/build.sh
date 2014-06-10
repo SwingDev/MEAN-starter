@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# cd $WORKSPACE
+cd $WORKSPACE
 bower install
 npm install
 npm install -g mocha

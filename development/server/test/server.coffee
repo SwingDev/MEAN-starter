@@ -12,16 +12,30 @@ describe "Create accunt and sign in", ->
          .expect 202, done
     return
 
+  it "GET /api/user/current/ should return 200 OK", (done) ->
+    agent.get("/api/user/current/")
+         .expect 200, done
+    return
+
+  it "POST /api/user/signout/ should return 200 OK", (done) ->
+    agent.post("/api/user/signout/")
+         .expect 200, done
+    return
+
+  it "GET /api/user/current/ should return 401", (done) ->
+    agent.get("/api/user/current/")
+         .expect 401, done
+    return
+
   it "POST /api/user/signin/ should return 200 OK", (done) ->
     agent.post("/api/user/signin/")
          .send(user_data)
          .expect 200, done
     return
 
-  it "GET /api/user/checklogin/ should return 200 OK", (done) ->
-    agent.get("/api/user/checklogin/")
+  it "GET /api/user/current/ should return 200 OK", (done) ->
+    agent.get("/api/user/current/")
          .expect 200, done
     return
 
   return
-

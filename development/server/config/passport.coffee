@@ -3,12 +3,15 @@ passport = require("passport")
 LocalStrategy = require("passport-local").Strategy
 User = require("../models/User")
 secrets = require("./secrets")
+
 passport.serializeUser (user, done) ->
   done null, user.id
   return
 
 passport.deserializeUser (id, done) ->
   User.findById id, (err, user) ->
+    # make sure that password doesn't leave the server when returning req.user
+    if user then user.password = 'this_is_secret'
     done err, user
     return
 

@@ -1,6 +1,11 @@
 mongoose = require("mongoose")
 bcrypt = require("bcrypt-nodejs")
 crypto = require("crypto")
+
+###
+Email is the unique field used to identify and manage users.
+###
+
 userSchema = new mongoose.Schema(
   email:
     type: String

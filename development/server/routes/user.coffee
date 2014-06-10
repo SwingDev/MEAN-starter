@@ -6,6 +6,7 @@ router = express.Router()
 
 router.post('/signup/', userController.postSignup)
 router.post('/signin/', userController.postLogin)
-router.get('/checklogin/', userController.isLoggedIn)
+router.post('/signout/', userController.logout)
 
+router.get('/current/', userController.isLoggedIn)
 module.exports = router

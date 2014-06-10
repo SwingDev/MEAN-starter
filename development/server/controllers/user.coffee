@@ -84,28 +84,35 @@ Create a new local account.
 exports.postSignup = (req, res, next) ->
   req.assert("email", "Email is not valid").isEmail()
   req.assert("password", "Password must be at least 4 characters long").len 4
-  req.assert("confirmPassword", "Passwords do not match").equals req.body.password
-  errors = req.validationErrors()
-  if errors
-    req.flash "errors", errors
-    return res.redirect("/signup")
+  validationErrors = req.validationErrors()
+  
+  if validationErrors
+    console.error(validationErrors)
+    res.json(400, {"validationErrors": validationErrors})
+    return
+
   user = new User(
     email: req.body.email
+    profile: {name: req.body.name}
     password: req.body.password
   )
+
   User.findOne
     email: req.body.email
   , (err, existingUser) ->
     if existingUser
-      req.flash "errors",
-        msg: "Account with that email address already exists."
+      console.error("Account with that email address already exists: " + req.body.email)
+      res.json(400, {"validationErrors": "Account with that email address already exists: " + req.body.email})
+      return
 
-      return res.redirect("/signup")
+      # req.flash "errors",
+      #   msg: "Account with that email address already exists."
+
     user.save (err) ->
-      return next(err)  if err
+      return next(err) if err
       req.logIn user, (err) ->
-        return next(err)  if err
-        res.redirect "/"
+        return next(err) if err
+        res.json(202, {"info": "User " + user.email + " created."})
         return
 
       return

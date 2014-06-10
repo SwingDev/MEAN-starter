@@ -10,8 +10,8 @@ gulp.task('watch', function() {
   return merge(
           gulp.src('./development/server/**/*.coffee')
           .pipe(watch({emit: 'all'}))
-          .pipe(coffeelint())
-          .pipe(coffeelint.reporter())
+          .pipe(coffeelint().on('error', function(){}))
+          .pipe(coffeelint.reporter().on('error', function(){}))
           .pipe(coffee({bare: true}).on('error', gutil.log))
           .pipe(gulp.dest('./build/server/')),
           gulp.src(['./development/server/**/*', '!./development/server/**/*.coffee'])
@@ -24,8 +24,8 @@ gulp.task('watch', function() {
 gulp.task('compile', function() {
   return merge(
           gulp.src('./development/server/**/*.coffee')
-          .pipe(coffeelint())
-          .pipe(coffeelint.reporter())
+          .pipe(coffeelint().on('error', function(){}))
+          .pipe(coffeelint.reporter().on('error', function(){}))
           .pipe(coffee({bare: true}).on('error', gutil.log))
           .pipe(gulp.dest('./build/server/')),
           gulp.src(['./development/server/**/*', '!./development/server/**/*.coffee'])

@@ -19,17 +19,21 @@ passport         = require("passport")
 expressValidator = require("express-validator")
 
 ###
+Routers
+###
+userRouter     = require("./routes/user")
+
+###
 Controllers (route handlers).
 ###
 homeController = require("./controllers/home")
-userController = require("./controllers/user")
 
 ###
 API keys and Passport configuration.
 ###
-secrets = require("./config/secrets")
-config = require("./config/config")
-passportConf = require("./config/passport")
+secrets        = require("./config/secrets")
+config         = require("./config/config")
+passportConf   = require("./config/passport")
 
 ###
 Create Express server.
@@ -52,8 +56,7 @@ week = day * 7
 CSRF whitelist.
 ###
 csrfExclude = [
-  "/url1"
-  "/url2"
+  "/api/"
 ]
 
 ###
@@ -83,7 +86,7 @@ app.use flash()
 app.use (req, res, next) ->
   
   # CSRF protection.
-  return next()  if _.contains(csrfExclude, req.path)
+  return next()  if _.some(csrfExclude, (item) -> return ~req.path.indexOf(item) )
   csrf req, res, next
   return
 
@@ -103,28 +106,14 @@ app.use (req, res, next) ->
   next()
   return
 
-app.use express.static(path.join(__dirname, "public"),
+app.use express.static(path.join(__dirname, "../public"),
   maxAge: week
 )
 
 ###
 Main routes.
 ###
-app.get  "/", homeController.index
-app.get  "/login", userController.getLogin
-app.post "/login", userController.postLogin
-app.get  "/logout", userController.logout
-app.get  "/forgot", userController.getForgot
-app.post "/forgot", userController.postForgot
-app.get  "/reset/:token", userController.getReset
-app.post "/reset/:token", userController.postReset
-app.get  "/signup", userController.getSignup
-app.post "/signup", userController.postSignup
-app.get  "/account", passportConf.isAuthenticated, userController.getAccount
-app.post "/account/profile", passportConf.isAuthenticated, userController.postUpdateProfile
-app.post "/account/password", passportConf.isAuthenticated, userController.postUpdatePassword
-app.post "/account/delete", passportConf.isAuthenticated, userController.postDeleteAccount
-# app.get  "/account/unlink/:provider", passportConf.isAuthenticated, userController.getOauthUnlink
+app.use('/api/user', userRouter)
 
 ###
 500 Error Handler.

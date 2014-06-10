@@ -6,7 +6,9 @@ passport   = require("passport")
 User       = require("../models/User")
 secrets    = require("../config/secrets")
 config     = require("../config/config")
-ejs        = require('ejs')
+mailer     = require("./mailer")
+swig       = require('swig')
+path       = require("path")
 
 
 ###
@@ -104,18 +106,72 @@ exports.postSignup = (req, res, next) ->
   return
 
 ###
+POST /forgot/
+Create a random token, then the send user an email with a reset link.
+@param email
+###
+exports.postForgot = (req, res, next) ->
+  UserNotFoundError = (message) ->
+    @name = "UserNotFoundError"
+    @message = (message || "")
+    return
+
+  UserNotFoundError.prototype = new Error()
+
+  req.assert("email", "Please enter a valid email address.").isEmail()
+  validationErrors = req.validationErrors()
+  if validationErrors
+    res.json(402, {"validationErrors": validationErrors})
+    return
+
+  async.waterfall [
+    (done) ->
+      crypto.randomBytes 16, (err, buf) ->
+        token = buf.toString("hex")
+        done err, token
+        return
+
+    (token, done) ->
+      User.findOne email: req.body.email.toLowerCase()
+      , (err, user) ->
+        if not user
+          done(new UserNotFoundError("Can't find email: " + req.body.email))
+        else
+          user.resetPasswordToken = token
+          user.resetPasswordExpires = Date.now() + 3600000 # 1 hour
+          user.save (err) ->
+            done err, token, user
+            return
+        return
+
+    (token, user, done) ->
+      smtpTransport = mailer.createSmtpTransport()
+      mailOptions =
+        to: user.email
+        from: config.mailer.defaulFromAddress
+        subject: "Reset your password "
+        text: swig.compileFile(path.join(__dirname, '../views/email/forgot/text.swig'))({'reset_url': req.host + '/reset_password', 'token': token})
+
+      smtpTransport.sendMail mailOptions, (err) ->
+        done err, token
+      
+  ], (err, token) ->
+    
+    if err instanceof UserNotFoundError
+      res.json(404, {"error": err.message})
+      return
+    else if err then next(err)
+
+    res.json(200, {"message": "Password reset email sent to " + req.body.email, "token": token})
+    return
+  
+  return
+
+
+
+###
 ~~~~~~~~~~~~~~~~~~~~ Changed to API until this point ~~~~~~~~~~~~~~~~~~~~~~~
 ###
-
-###
-GET /account
-Profile page.
-###
-exports.getAccount = (req, res) ->
-  res.render "account/profile",
-    title: "Account Management"
-
-  return
 
 
 ###
@@ -297,64 +353,3 @@ exports.postReset = (req, res, next) ->
   return
 
 
-###
-POST /forgot
-Create a random token, then the send user an email with a reset link.
-@param email
-###
-exports.postForgot = (req, res, next) ->
-  req.assert("email", "Please enter a valid email address.").isEmail()
-  errors = req.validationErrors()
-  if errors
-    req.flash "errors", errors
-    return res.redirect("/forgot")
-  async.waterfall [
-    (done) ->
-      crypto.randomBytes 16, (err, buf) ->
-        token = buf.toString("hex")
-        done err, token
-        return
-
-    (token, done) ->
-      User.findOne
-        email: req.body.email.toLowerCase()
-      , (err, user) ->
-        unless user
-          req.flash "errors",
-            msg: "No account with that email address exists."
-
-          return res.redirect("/forgot")
-        user.resetPasswordToken = token
-        user.resetPasswordExpires = Date.now() + 3600000 # 1 hour
-        user.save (err) ->
-          done err, token, user
-          return
-
-        return
-
-    (token, user, done) ->
-      smtpTransport = nodemailer.createTransport("SMTP",
-        service: "Mailgun"
-        auth:
-          user: secrets.mailgun.user
-          pass: secrets.mailgun.password
-      )
-      mailOptions =
-        to: user.email
-        from: config.mailer.defaulFromAddress
-        subject: "Reset your password "
-        text: ejs.render('email/forgot/text.ejs', {'app_url': req.header.host + '/reset', 'token': token})
-
-      smtpTransport.sendMail mailOptions, (err) ->
-        req.flash "info",
-          msg: "An e-mail has been sent to " + user.email + " with further instructions."
-
-        done err, "done"
-        return
-
-  ], (err) ->
-    return next(err)  if err
-    res.redirect "/forgot"
-    return
-
-  return

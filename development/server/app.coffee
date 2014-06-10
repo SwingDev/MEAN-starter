@@ -65,7 +65,7 @@ Express configuration.
 ###
 app.set "port", process.env.PORT or 3000
 
-app.set('views', path.join(__dirname, 'views'))
+app.set('views', path.join(__dirname, 'views')) # useful for mail templates
 app.set('view engine', 'jade')
 app.use compress()
 

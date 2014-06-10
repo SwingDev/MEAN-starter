@@ -8,7 +8,7 @@
   "scripts": {
     "mongo": "mongod --dbpath .data/db/",
     "start": "node-dev build/server/app.js",
-    "test": "mocha --reporter spec --timeout 2000 --recursive build/server/test/", 
+    "test": "mocha --reporter spec --timeout 10000 --recursive build/server/test/",
     "e2e_test": "mocha-casperjs --reporter=spec --recursive build/server/e2e_test/*",
     "debug": "node-debug build/server/app.js"
   },
@@ -20,7 +20,6 @@
     "compression": "^1.0.3",
     "connect-mongo": "^0.4.1",
     "cookie-parser": "^1.1.0",
-    "ejs": "^1.0.0",
     "errorhandler": "^1.0.1",
     "express": "^4.4.1",
     "express-flash": "^0.0.2",
@@ -37,6 +36,7 @@
     "passport-local": "^1.0.0",
     "request": "^2.36.0",
     "serve-static": "~1.2.1",
+    "swig": "^1.3.2",
     "uglify-js": "^2.4.13",
     "validator": "^3.13.0",
     "yui": "^3.17.1"
@@ -51,6 +51,7 @@
     "gulp-bower-files": "^0.2.4",
     "gulp-coffee": "^2.0.0",
     "gulp-coffeelint": "^0.3.3",
+    "gulp-plumber": "^0.6.2",
     "gulp-util": "^2.2.16",
     "gulp-watch": "^0.6.5",
     "istanbul": "^0.2.10",

@@ -39,3 +39,25 @@ describe "Create accunt and sign in", ->
     return
 
   return
+
+describe "Frogotten password flow", ->
+  user_data = {"email": "marcin.mincer+mean@gmail.com", "password": "1234"}
+  it "Should not find the user first", (done) ->
+    agent.post("/api/user/forgot/")
+         .send({email: user_data.email})
+         .expect 404, done
+    return
+
+  it "Add new user user_test_mail@example.com", (done) ->
+    agent.post("/api/user/signup/")
+         .send(user_data)
+         .expect 202, done
+    return
+
+  it "POST /api/user/forgot/ should return 200 OK", (done) ->
+    agent.post("/api/user/forgot/")
+         .send({email: user_data.email})
+         .expect 200, done
+    return
+  
+  return

@@ -11,6 +11,13 @@ swig       = require('swig')
 path       = require("path")
 
 
+UserNotFoundError = (message) ->
+  @name = "UserNotFoundError"
+  @message = (message || "")
+  return
+
+UserNotFoundError.prototype = new Error()
+
 ###
 POST /signin/
 Sign in using email and password.
@@ -111,13 +118,6 @@ Create a random token, then the send user an email with a reset link.
 @param email
 ###
 exports.postForgot = (req, res, next) ->
-  UserNotFoundError = (message) ->
-    @name = "UserNotFoundError"
-    @message = (message || "")
-    return
-
-  UserNotFoundError.prototype = new Error()
-
   req.assert("email", "Please enter a valid email address.").isEmail()
   validationErrors = req.validationErrors()
   if validationErrors
@@ -167,6 +167,38 @@ exports.postForgot = (req, res, next) ->
   
   return
 
+###
+POST /reset/
+Process the reset password request.
+@param token
+@param password
+###
+exports.postReset = (req, res, next) ->
+  req.assert("password", "Password must be at least 4 characters long.").len 4
+  req.assert("token", "Token can't be empty").len 1
+  validationErrors = req.validationErrors()
+  if validationErrors
+    res.json(402, {"validationErrors": validationErrors})
+    return
+
+  User.findOne(resetPasswordToken: req.body.token).where("resetPasswordExpires").gt(Date.now()).exec (err, user) ->
+    return next(err) if err
+    if not user
+      res.json(404, {error: "Can't find token: " + req.body.token})
+      return
+    else
+      user.password = req.body.password
+      user.resetPasswordToken = `undefined`
+      user.resetPasswordExpires = `undefined`
+      user.save (err) ->
+        return next(err) if err
+        req.logIn user, (err) ->
+          return next(err) if err
+          res.json(200, {"message": "Password updated."})
+          return
+        return
+      return
+  return
 
 
 ###
@@ -270,86 +302,4 @@ exports.getOauthUnlink = (req, res, next) ->
     return
 
   return
-
-
-###
-GET /reset/:token
-Reset Password page.
-###
-exports.getReset = (req, res) ->
-  return res.redirect("/")  if req.isAuthenticated()
-  User.findOne(resetPasswordToken: req.params.token).where("resetPasswordExpires").gt(Date.now()).exec (err, user) ->
-    unless user
-      req.flash "errors",
-        msg: "Password reset token is invalid or has expired."
-
-      return res.redirect("/forgot")
-    res.render "account/reset",
-      title: "Password Reset"
-
-    return
-
-  return
-
-
-###
-POST /reset/:token
-Process the reset password request.
-@param token
-###
-exports.postReset = (req, res, next) ->
-  req.assert("password", "Password must be at least 4 characters long.").len 4
-  req.assert("confirm", "Passwords must match.").equals req.body.password
-  errors = req.validationErrors()
-  if errors
-    req.flash "errors", errors
-    return res.redirect("back")
-  async.waterfall [
-    (done) ->
-      User.findOne(resetPasswordToken: req.params.token).where("resetPasswordExpires").gt(Date.now()).exec (err, user) ->
-        unless user
-          req.flash "errors",
-            msg: "Password reset token is invalid or has expired."
-
-          return res.redirect("back")
-        user.password = req.body.password
-        user.resetPasswordToken = `undefined`
-        user.resetPasswordExpires = `undefined`
-        user.save (err) ->
-          return next(err)  if err
-          req.logIn user, (err) ->
-            done err, user
-            return
-
-          return
-
-        return
-
-    (user, done) ->
-      smtpTransport = nodemailer.createTransport("SMTP",
-        service: "Mailgun"
-        auth:
-          user: secrets.mailgun.user
-          pass: secrets.mailgun.password
-      )
-      mailOptions =
-        to: user.email
-        from: config.mailer.defaulFromAddress
-        subject: "Your password has been changed"
-        text: "Hello,\n\n" + "This is a confirmation that the password for your account " + user.email + " has just been changed.\n"
-
-      smtpTransport.sendMail mailOptions, (err) ->
-        req.flash "success",
-          msg: "Success! Your password has been changed."
-
-        done err
-        return
-
-  ], (err) ->
-    return next(err)  if err
-    res.redirect "/"
-    return
-
-  return
-
 

@@ -3,18 +3,25 @@ var gulp       = require('gulp');
     coffee     = require('gulp-coffee');
     watch      = require('gulp-watch');
     merge      = require('merge-stream');
-    coffeelint = require('gulp-coffeelint')
+    coffeelint = require('gulp-coffeelint');
+    plumber    = require('gulp-plumber');
 
+var onError = function (err) {  
+  gutil.beep();
+  gutil.log(err);
+};
 
 gulp.task('watch', function() {
   return merge(
           gulp.src('./development/server/**/*.coffee')
+          .pipe(plumber({errorHandler: onError}))
           .pipe(watch({glob: './development/server/**/*.coffee'}))
-          .pipe(coffeelint()).on('error', function(){})
-          .pipe(coffeelint.reporter()).on('error', function(){})
-          .pipe(coffee({bare: true})).on('error', gutil.log)
+          .pipe(coffeelint())
+          .pipe(coffeelint.reporter())
+          .pipe(coffee({bare: true}))
           .pipe(gulp.dest('./build/server/')),
           gulp.src(['./development/server/**/*', '!./development/server/**/*.coffee'])
+          .pipe(plumber({errorHandler: onError}))
           .pipe(watch({glob: ['./development/server/**/*', '!./development/server/**/*.coffee']}))
           .pipe(gulp.dest('./build/server/'))
         );
@@ -24,11 +31,13 @@ gulp.task('watch', function() {
 gulp.task('compile', function() {
   return merge(
           gulp.src('./development/server/**/*.coffee')
-          .pipe(coffeelint()).on('error', function(){})
-          .pipe(coffeelint.reporter()).on('error', function(){})
-          .pipe(coffee({bare: true})).on('error', gutil.log)
+          .pipe(plumber({errorHandler: onError}))
+          .pipe(coffeelint())
+          .pipe(coffeelint.reporter())
+          .pipe(coffee({bare: true}))
           .pipe(gulp.dest('./build/server/')),
           gulp.src(['./development/server/**/*', '!./development/server/**/*.coffee'])
+          .pipe(plumber({errorHandler: onError}))
           .pipe(gulp.dest('./build/server/'))
         );
 });

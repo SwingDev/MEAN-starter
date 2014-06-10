@@ -18,29 +18,34 @@ Sign in using email and password.
 exports.postLogin = (req, res, next) ->
   req.assert("email", "Email is not valid").isEmail()
   req.assert("password", "Password cannot be blank").notEmpty()
-  errors = req.validationErrors()
-  if errors
-    req.flash "errors", errors
-    return res.redirect("/login")
+  validationErrors = req.validationErrors()
+  if validationErrors
+    res.json(402, {'validationErrors': validationErrors})
+    return
   passport.authenticate("local", (err, user, info) ->
-    return next(err)  if err
+    return next(err) if err
+    
     unless user
-      req.flash "errors",
-        msg: info.message
-
-      return res.redirect("/login")
-    req.logIn user, (err) ->
-      return next(err)  if err
-      req.flash "success",
-        msg: "Success! You are logged in."
-
-      res.redirect req.session.returnTo or "/"
+      res.json(403, {"error": info.message})
       return
-
+    
+    req.logIn user, (err) ->
+      return next(err) if err
+      res.json(200, {"user_profile": user.profile, "user_email": user.email})
+      return
+    
     return
   ) req, res, next
   return
 
+###
+GET /checklogin/
+###
+exports.isLoggedIn = (req, res, next) ->
+  if req.isAuthenticated()
+    res.json(200, {"user": req.user})
+  else
+    res.json(401, {})
 
 ###
 GET /logout
@@ -48,19 +53,7 @@ Log out.
 ###
 exports.logout = (req, res) ->
   req.logout()
-  res.redirect "/"
-  return
-
-
-###
-GET /signup
-Signup page.
-###
-exports.getSignup = (req, res) ->
-  return res.redirect("/")  if req.user
-  res.render "account/signup",
-    title: "Create Account"
-
+  res.json(200, {"message": "Logged out"})
   return
 
 
@@ -297,18 +290,6 @@ exports.postReset = (req, res, next) ->
     return next(err)  if err
     res.redirect "/"
     return
-
-  return
-
-
-###
-GET /forgot
-Forgot Password page.
-###
-exports.getForgot = (req, res) ->
-  return res.redirect("/")  if req.isAuthenticated()
-  res.render "account/forgot",
-    title: "Forgot Password"
 
   return
 

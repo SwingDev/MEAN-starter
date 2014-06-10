@@ -8,7 +8,7 @@
   "scripts": {
     "mongo": "mongod --dbpath .data/db/",
     "start": "node-dev build/server/app.js",
-    "test": "mocha --reporter spec --timeout 2000 --recursive build/server", 
+    "test": "mocha --reporter spec --timeout 2000 --recursive build/server/test/", 
     "e2e_test": "mocha-casperjs --reporter=spec --recursive build/server/e2e_test/*"
   },
   "dependencies": {

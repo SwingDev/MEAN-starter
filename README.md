@@ -21,3 +21,4 @@ We use gulp to compile backend coffee (`gulp watch`)
 
 ## Testing
 Run `npm test`
+Run `npm run e2e_test`

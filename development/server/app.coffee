@@ -19,12 +19,13 @@ passport         = require("passport")
 expressValidator = require("express-validator")
 
 ###
-Routers
+Routers (route handlers)
 ###
 userRouter     = require("./routes/user")
 
 ###
-Controllers (route handlers).
+Controllers (route functions).
+This controller should be changed to be decoupled like userController.
 ###
 homeController = require("./controllers/home")
 

@@ -208,6 +208,62 @@ exports.postReset = (req, res, next) ->
   return
 
 
+exports.getUser = (req, res, next) ->
+  req.assert("email", "You need to say email you want to get").isEmail()
+  validationErrors = req.validationErrors()
+  if validationErrors
+    res.json(402, {"validationErrors": validationErrors})
+    return
+
+  if req.isAuthenticated()
+    if req.user.email == req.params.email
+      res.json(200, {"user": req.user})
+      return
+    
+    if req.user.isAdmin
+      User.findOne {email: req.params.email}, (err, user) ->
+        next(err) if err
+        if user
+          res.json(200, {"user": user})
+        else
+          res.json(404, {error: "Can't find user with email: " + req.params.email})
+      return
+
+  res.json(401, {})
+  
+exports.putUser = (req, res, next) ->
+
+exports.deleteUser = (req, res, next) ->
+  req.assert("email", "You need to say email you want to get").isEmail()
+  validationErrors = req.validationErrors()
+  if validationErrors
+    res.json(402, {"validationErrors": validationErrors})
+    return
+
+  if req.isAuthenticated()
+    if req.user.email == req.params.email
+      User.remove {email: req.params.email}, (err) ->
+        next(err) if err
+        req.logout()
+        res.json(200, {"message": "Your account has been removed."})
+      return
+    
+    if req.user.isAdmin
+      User.findOne {email: req.params.email}, (err, user) ->
+        next(err) if err
+        if user
+          user.remove (err, user) ->
+            next(err) if err
+            res.json(200, {"message": "Account " + user.email + " has been removed."})
+        else
+          res.json(404, {error: "Can't find user with email: " + req.params.email})
+      return
+
+  res.json(401, {})
+
+
+
+
 ###
 ~~~~~~~~~~~~~~~~~~~~ Changed to API until this point ~~~~~~~~~~~~~~~~~~~~~~~
 ###

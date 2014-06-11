@@ -41,4 +41,4 @@ Differences from express-user-couchdb:
 * Single user attribute `isAdmin` giving user superpowers.
 
 ### Brief summary of API methods
-Go to `routes/user.coffee` and look at the comments
+Go to `routes/user.coffee` and look at the comments. You will probably have to change stuff in passwor reset controller, to match your domain, port, templates and frontend url schema.

@@ -10,6 +10,7 @@ Sessions in cookie, persisted in MongoDB
 @param name
 @param password (required)
 @param email (required)
+@returns {json} user profile
 ###
 router.post('/signup/', userController.postSignup)
 
@@ -33,11 +34,21 @@ router.post('/forgot/', userController.postForgot)
 
 ###
 Reset password. Provide new password and token that you got in email.
-Logs in automatically. 
+Logs in automatically.
 @param password - new password you want to set
 @param token
 ###
 router.post('/reset/', userController.postReset)
 
+###
+Gets current logged in user info
+###
 router.get('/current/', userController.isLoggedIn)
+
+router.get('/:email', userController.getUser)
+router.put('/:email', userController.putUser)
+router.delete('/:email', userController.deleteUser)
+
+
+
 module.exports = router

@@ -15,7 +15,9 @@ userSchema = new mongoose.Schema(
   password: String
   instagram: String
   tokens: Array
-  isAdmin: Boolean
+  isAdmin:
+    type: Boolean
+    default: false
   profile:
     name:
       type: String

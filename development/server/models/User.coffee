@@ -62,6 +62,10 @@ userSchema.pre "save", (next) ->
 
   return
 
+userSchema.methods.toJSON = () ->
+  obj = @toObject()
+  delete obj.password
+  return obj
 
 ###
 Validate users password.
@@ -75,6 +79,19 @@ userSchema.methods.comparePassword = (candidatePassword, cb) ->
 
   return
 
+userSchema.methods.updateDocument = (data, done) ->
+  if data.password?
+    @password = data.password
+    delete data.password
+    @save (err, user) ->
+      return done(err, user) if err
+      @update { $set: data }, {}, (err, numAffected, rawResponse) ->
+        return done(err, null) if err
+        done(null, @)
+  else
+    @update { $set: data }, {}, (err, numAffected, rawResponse) ->
+      return done(err, null) if err
+      done(null, @)
 
 ###
 Get URL to a users gravatar.

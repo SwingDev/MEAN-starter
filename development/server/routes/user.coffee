@@ -45,8 +45,12 @@ Gets current logged in user info
 ###
 router.get('/current/', userController.isLoggedIn)
 
+###
+You can always modify your user object.
+If you have isAdmin = true, you can modify all users' objects.
+###
 router.get('/:email', userController.getUser)
-router.put('/:email', userController.putUser)
+router.patch('/:email', userController.patchUser)
 router.delete('/:email', userController.deleteUser)
 
 

@@ -2,20 +2,7 @@ mongoose = require("mongoose")
 bcrypt   = require("bcrypt-nodejs")
 crypto   = require("crypto")
 _        = require("lodash")
-
-
-Object.byString = (o, s) ->
-  s = s.replace(/\[(\w+)\]/g, ".$1") # convert indexes to properties
-  s = s.replace(/^\./, "") # strip a leading dot
-  a = s.split(".")
-  while a.length
-    n = a.shift()
-    if n of o
-      o = o[n]
-    else
-      return
-  return o
-
+utils    = require("./utils")
 
 ###
 Email is the unique field used to identify and manage users.
@@ -94,28 +81,36 @@ userSchema.methods.comparePassword = (candidatePassword, cb) ->
 
   return
 
+###
+Thanks this method the model will acutally be properly updated what includes:
+* Running validations
+* Running mongoose middlewars
+* Only updating existing paths, ignoring other stuff
+* Going deep into nested objects
+
+@WARNING: it only works up to one nesting level, struggling to generalise that for more
+
+@TODO This should be generalised and moved to separate module to be reused with other models
+###
 userSchema.methods.updateDocument = (data, done) ->
-  console.log(userSchema.path('profile.gender'))
-  # console.log(_.keys(userSchema.paths))
-
   for k,v of userSchema.paths
-    @[k] = Object.byString(data, String(k)) if Object.byString(data, String(k))?
-    console.log("#{k}, #{@[k]}") # if Object.byString(data, String(k))?
-  
-  done(null, @)
+    if utils.getAttrByString(data, String(k))?
+      
+      # # this doesn't work :(
+      # utils.getAttrByString(@, String(k)) = utils.getAttrByString(data, String(k))
 
-  # if data.password?
-  #   @password = data.password
-  #   delete data.password
-  #   @save (err, user) =>
-  #     return done(err, user) if err
-  #     @update { $set: data }, {}, (err, numAffected, rawResponse) =>
-  #       return done(err, null) if err
-  #       done(null, @)
-  # else
-  #   @update { $set: data }, {}, (err, numAffected, rawResponse) =>
-  #     return done(err, null) if err
-  #     done(null, @)
+      # ashamed of this solution :(
+      attrs = String(k).split "."
+      if attrs.length == 2
+        @[attrs[0]][attrs[1]] = data[attrs[0]][attrs[1]]
+      else if attrs.length == 1
+        @[attrs[0]] = data[attrs[0]]
+      else
+        done("Can not nest schemas deeper then one level User model.", @)
+      
+  @save (err, user) =>
+    return done(err, user) if err
+    done(null, @)
 
 ###
 Get URL to a users gravatar.

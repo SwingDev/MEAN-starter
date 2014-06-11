@@ -163,7 +163,7 @@ exports.postForgot = (req, res, next) ->
     if err instanceof UserNotFoundError
       res.json(404, {"error": err.message})
       return
-    else if err then next(err)
+    else if err then return next(err)
 
     if process.env.NODE_ENV == "test"
       res.json(200, {"message": "Password reset email sent to " + req.body.email, "token": token})
@@ -222,7 +222,7 @@ exports.getUser = (req, res, next) ->
     
     if req.user.isAdmin
       User.findOne {email: req.params.email}, (err, user) ->
-        next(err) if err
+        return next(err) if err
         if user
           res.json(200, {"user": user})
         else
@@ -245,14 +245,12 @@ exports.patchUser = (req, res, next) ->
         res.json(403, {"error": "Only admin can make new admins."})
       
       User.findOne {email: req.params.email}, (err, user) ->
-        next(err) if err
+        return next(err) if err
         return  res.json(404, {error: "Can't find user with email: " + req.params.email}) if not user
         user.updateDocument req.body
         , (err, user) ->
-          next(err) if err
-          res.json(200, {"user": user})
-          # User.findById user._id, (err, user) ->
-          #   next(err) if err
+          return next(err) if err
+          return res.json(200, {"user": user})
             
       return
   res.json(401, {})
@@ -268,7 +266,7 @@ exports.deleteUser = (req, res, next) ->
   if req.isAuthenticated()
     if req.user.email == req.params.email or req.user.isAdmin
       User.remove {email: req.params.email}, (err) ->
-        next(err) if err
+        return next(err) if err
         req.logout() if not req.user.isAdmin
         res.json(200, {"message": "Account " + req.params.email + " has been removed."})
       return

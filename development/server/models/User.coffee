@@ -1,6 +1,21 @@
 mongoose = require("mongoose")
-bcrypt = require("bcrypt-nodejs")
-crypto = require("crypto")
+bcrypt   = require("bcrypt-nodejs")
+crypto   = require("crypto")
+_        = require("lodash")
+
+
+Object.byString = (o, s) ->
+  s = s.replace(/\[(\w+)\]/g, ".$1") # convert indexes to properties
+  s = s.replace(/^\./, "") # strip a leading dot
+  a = s.split(".")
+  while a.length
+    n = a.shift()
+    if n of o
+      o = o[n]
+    else
+      return
+  return o
+
 
 ###
 Email is the unique field used to identify and manage users.
@@ -80,18 +95,27 @@ userSchema.methods.comparePassword = (candidatePassword, cb) ->
   return
 
 userSchema.methods.updateDocument = (data, done) ->
-  if data.password?
-    @password = data.password
-    delete data.password
-    @save (err, user) ->
-      return done(err, user) if err
-      @update { $set: data }, {}, (err, numAffected, rawResponse) ->
-        return done(err, null) if err
-        done(null, @)
-  else
-    @update { $set: data }, {}, (err, numAffected, rawResponse) ->
-      return done(err, null) if err
-      done(null, @)
+  console.log(userSchema.path('profile.gender'))
+  # console.log(_.keys(userSchema.paths))
+
+  for k,v of userSchema.paths
+    @[k] = Object.byString(data, String(k)) if Object.byString(data, String(k))?
+    console.log("#{k}, #{@[k]}") # if Object.byString(data, String(k))?
+  
+  done(null, @)
+
+  # if data.password?
+  #   @password = data.password
+  #   delete data.password
+  #   @save (err, user) =>
+  #     return done(err, user) if err
+  #     @update { $set: data }, {}, (err, numAffected, rawResponse) =>
+  #       return done(err, null) if err
+  #       done(null, @)
+  # else
+  #   @update { $set: data }, {}, (err, numAffected, rawResponse) =>
+  #     return done(err, null) if err
+  #     done(null, @)
 
 ###
 Get URL to a users gravatar.

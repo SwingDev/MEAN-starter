@@ -40,7 +40,7 @@ exports.postLogin = (req, res, next) ->
     
     req.logIn user, (err) ->
       return next(err) if err
-      res.json(200, {"user_profile": user.profile, "user_email": user.email})
+      res.json(200, {"user": user})
       return
     
     return
@@ -242,17 +242,18 @@ exports.patchUser = (req, res, next) ->
     if req.user.email == req.params.email or req.user.isAdmin
       
       if 'isAdmin' of req.body and not req.user.isAdmin
-          res.json(403, {"error": "Only admin can make new admins."})
+        res.json(403, {"error": "Only admin can make new admins."})
       
       User.findOne {email: req.params.email}, (err, user) ->
         next(err) if err
         return  res.json(404, {error: "Can't find user with email: " + req.params.email}) if not user
         user.updateDocument req.body
-        , (err) ->
+        , (err, user) ->
           next(err) if err
-          User.findById user._id, (err, user) -> 
-            next(err) if err
-            res.json(200, {"user": user})
+          res.json(200, {"user": user})
+          # User.findById user._id, (err, user) ->
+          #   next(err) if err
+            
       return
   res.json(401, {})
 

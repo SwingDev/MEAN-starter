@@ -29,7 +29,7 @@ exports.postLogin = (req, res, next) ->
   req.assert("password", "Password cannot be blank").notEmpty()
   validationErrors = req.validationErrors()
   if validationErrors
-    res.json(402, {'validationErrors': validationErrors})
+    res.json(400, {'validationErrors': validationErrors})
     return
   passport.authenticate("local", (err, user, info) ->
     return next(err) if err
@@ -54,7 +54,7 @@ exports.isLoggedIn = (req, res, next) ->
   if req.isAuthenticated()
     res.json(200, {"user": req.user})
   else
-    res.json(401, {})
+    res.json(403, {})
 
 ###
 POST /signout/
@@ -121,7 +121,7 @@ exports.postForgot = (req, res, next) ->
   req.assert("email", "Please enter a valid email address.").isEmail()
   validationErrors = req.validationErrors()
   if validationErrors
-    res.json(402, {"validationErrors": validationErrors})
+    res.json(400, {"validationErrors": validationErrors})
     return
 
   async.waterfall [
@@ -185,7 +185,7 @@ exports.postReset = (req, res, next) ->
   req.assert("token", "Token can't be empty").len 1
   validationErrors = req.validationErrors()
   if validationErrors
-    res.json(402, {"validationErrors": validationErrors})
+    res.json(400, {"validationErrors": validationErrors})
     return
 
   User.findOne(resetPasswordToken: req.body.token).where("resetPasswordExpires").gt(Date.now()).exec (err, user) ->
@@ -212,7 +212,7 @@ exports.getUser = (req, res, next) ->
   req.assert("email", "You need to say email of the user you want to get").isEmail()
   validationErrors = req.validationErrors()
   if validationErrors
-    res.json(402, {"validationErrors": validationErrors})
+    res.json(400, {"validationErrors": validationErrors})
     return
 
   if req.isAuthenticated()
@@ -229,20 +229,20 @@ exports.getUser = (req, res, next) ->
           res.json(404, {error: "Can't find user with email: " + req.params.email})
       return
 
-  res.json(401, {})
+  res.json(403, {})
   
 exports.patchUser = (req, res, next) ->
   req.assert("email", "You need to say email of the user you want to change").isEmail()
   validationErrors = req.validationErrors()
   if validationErrors
-    res.json(402, {"validationErrors": validationErrors})
+    res.json(400, {"validationErrors": validationErrors})
     return
 
   if req.isAuthenticated()
     if req.user.email == req.params.email or req.user.isAdmin
       
       if 'isAdmin' of req.body and not req.user.isAdmin
-        res.json(403, {"error": "Only admin can make new admins."})
+        return res.json(403, {"error": "Only admin can make new admins."})
       
       User.findOne {email: req.params.email}, (err, user) ->
         return next(err) if err
@@ -253,14 +253,14 @@ exports.patchUser = (req, res, next) ->
           return res.json(200, {"user": user})
             
       return
-  res.json(401, {})
+  res.json(403, {})
 
 
 exports.deleteUser = (req, res, next) ->
   req.assert("email", "You need to say email of the user you want to remove").isEmail()
   validationErrors = req.validationErrors()
   if validationErrors
-    res.json(402, {"validationErrors": validationErrors})
+    res.json(400, {"validationErrors": validationErrors})
     return
 
   if req.isAuthenticated()
@@ -270,7 +270,7 @@ exports.deleteUser = (req, res, next) ->
         req.logout() if not req.user.isAdmin
         res.json(200, {"message": "Account " + req.params.email + " has been removed."})
       return
-  res.json(401, {})
+  res.json(403, {})
 
 ###
 ~~~~~~~~~~~~~~~~~~~~ Changed to API until this point ~~~~~~~~~~~~~~~~~~~~~~~

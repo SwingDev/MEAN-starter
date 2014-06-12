@@ -1,5 +1,7 @@
 #!/bin/bash
 
+npm config set prefix /Users/jenkins/.npm
+
 cd $WORKSPACE
 bower install
 npm install

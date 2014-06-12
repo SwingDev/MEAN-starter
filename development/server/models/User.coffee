@@ -87,27 +87,13 @@ Thanks this method the model will acutally be properly updated what includes:
 * Running mongoose middlewars
 * Only updating existing paths, ignoring other stuff
 * Going deep into nested objects
-
-@WARNING: it only works up to one nesting level, struggling to generalise that for more
-
-@TODO This should be generalised and moved to separate module to be reused with other models
 ###
 userSchema.methods.updateDocument = (data, done) ->
   for k,v of userSchema.paths
-    if utils.getAttrByString(data, String(k))?
-      
-      # # this doesn't work :(
-      # utils.getAttrByString(@, String(k)) = utils.getAttrByString(data, String(k))
-
-      # ashamed of this solution :(
-      attrs = String(k).split "."
-      if attrs.length == 2
-        @[attrs[0]][attrs[1]] = data[attrs[0]][attrs[1]]
-      else if attrs.length == 1
-        @[attrs[0]] = data[attrs[0]]
-      else
-        done("Can not nest schemas deeper then one level User model.", @)
-      
+    # Don't assing mongo internal properties (start with '_') and assing only 
+    # properties that are in the original model
+    if String(k).charAt(0) != '_' and utils.getAttrByString(data, String(k))? 
+      eval("this.#{k} = data.#{k};")      
   @save (err, user) =>
     return done(err, user) if err
     done(null, @)

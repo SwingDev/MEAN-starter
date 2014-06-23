@@ -1,33 +1,60 @@
-# FridaySheriff = angular.module 'FridaySheriff', ['ui.router', 'FridaySheriff.services']
+MEAN = angular.module 'MEAN', ['ui.router', 'MEAN.services']
 
-# FridaySheriff.config ($stateProvider, $urlRouterProvider) ->
-#     $urlRouterProvider.otherwise '/dashboard'
+MEAN.config ($stateProvider, $urlRouterProvider) ->
+    $urlRouterProvider.otherwise '/'
 
-#     $stateProvider
-#         .state 'dashboard',
-#             url: '/dashboard'
-#             templateUrl: 'partials/dashboard.html'
-#             controller: 'DashboardController'
-#             authenticate: true
-#         .state 'admin',
-#             url: '/admin'
-#             templateUrl: 'partials/admin.html'
-#             controller: 'AdminController'
-#             authenticate: 'admin'
-#         .state 'signin',
-#             url: '/signin'
-#             templateUrl: 'partials/signin.html'
-#             controller: 'SignInController'
-#     return
+    $stateProvider
+        .state 'home',
+            url: '/'
+            views:
+                'main':
+                    templateUrl: 'partials/home.html'
+            authenticate: false
+        .state 'signup',
+            url: '/signup'
+            views:
+                'main':
+                    templateUrl: 'partials/signup.html'
+            constroller: 'AuthController'
+            authenticate: false
+        .state 'signin',
+            url: '/signin'
+            views:
+                'main':
+                    templateUrl: 'partials/signin.html'
+            controller: 'AuthController'
+            authenticate: false
+        .state 'forgotten-password',
+            url: '/forgotten-password'
+            views:
+                'main':
+                    templateUrl: 'partials/forgotten-password.html'
+            controller: 'AuthController'
+            authenticate: false
+        .state 'reset-password',
+            url: '/reset-password/{forgot-code}'
+            views:
+                'main':
+                    templateUrl: 'partials/reset-password.html'
+            controller: 'AuthController'
+            authenticate: false
+        .state 'profile',
+            url: '/profile'
+            views:
+                'main':
+                    templateUrl: 'partials/profile.html'
+            controller: 'UserController'
+            authenticate: true
+    return
 
-# FridaySheriff.run ($rootScope, $state, AuthService) ->
-#     $rootScope.$on '$stateChangeStart', (event, toState, toParams, fromState, fromParams) ->
-#         if toState.authenticate and not AuthService.isAuthenticated()
-#             $state.transitionTo 'signin'
-#             event.preventDefault()
-#         return
-#     return
+MEAN.run ($rootScope, $state, AuthService) ->
+    $rootScope.$on '$stateChangeStart', (event, toState, toParams, fromState, fromParams) ->
+        if toState.authenticate and not AuthService.isAuthenticated()
+            $state.transitionTo 'signin'
+            event.preventDefault()
+        return
+    return
 
 
-# angular.module 'FridaySheriff.services', ['FridaySheriff.services.auth']
-# angular.module 'FridaySheriff.services.auth', []
+angular.module 'MEAN.services', ['MEAN.services.auth']
+angular.module 'MEAN.services.auth', []

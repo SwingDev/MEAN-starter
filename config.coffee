@@ -11,6 +11,8 @@ exports.config =
             joinTo:
                 'scripts/site.js': /^development[\/\\]public[\/\\]scripts/
                 'scripts/vendor.js': /^(development[\/\\]public[\/\\]vendor|bower_components)/
+            order:
+                before: ['development/public/scripts/main.coffee']
         stylesheets:
             defaultExtension: 'scss'
             joinTo:

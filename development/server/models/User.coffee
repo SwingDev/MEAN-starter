@@ -90,10 +90,10 @@ Thanks this method the model will acutally be properly updated what includes:
 ###
 userSchema.methods.updateDocument = (data, done) ->
   for k,v of userSchema.paths
-    # Don't assing mongo internal properties (start with '_') and assing only 
+    # Don't assing mongo internal properties (start with '_') and assing only
     # properties that are in the original model
-    if String(k).charAt(0) != '_' and utils.getAttrByString(data, String(k))? 
-      eval("this.#{k} = data.#{k};")      
+    if String(k).charAt(0) != '_' and utils.getAttrByString(data, String(k))?
+      eval("this.#{k} = data.#{k};")
   @save (err, user) =>
     return done(err, user) if err
     done(null, @)

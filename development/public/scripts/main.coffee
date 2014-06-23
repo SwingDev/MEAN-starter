@@ -44,7 +44,7 @@ MEAN.config ($stateProvider, $urlRouterProvider) ->
                 'main':
                     templateUrl: 'partials/profile.html'
             controller: 'UserController'
-            authenticate: true
+            authenticate: false
     return
 
 MEAN.run ($rootScope, $state, AuthService) ->

@@ -1,0 +1,29 @@
+<div class="row">
+    <div class="col-xs-4 col-xs-offset-4">
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h1 class="panel-title">Account settings</h1>
+            </div>
+            <div class="panel-body">
+                <form name="updateUserForm" role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" ng-model="AuthService.user.profile.first_name" placeholder="First name">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" ng-model="AuthService.user.profile.last_name" placeholder="Last name">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" ng-model="AuthService.user.name" placeholder="User name" required disabled>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" class="form-control" ng-model="AuthService.user.email" placeholder="E-mail" required>
+                    </div>
+                    <p class="help-block"><small>To change password, use the <a ui-sref="forgotten-password">Forgotten password</a> form</p>
+                    <button type="submit" class="btn btn-primary" ng-click="updateUser()">Update</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -1,4 +1,4 @@
-MEAN = angular.module 'MEAN', ['ui.router', 'MEAN.services']
+MEAN = angular.module 'MEAN', ['ui.router', 'MEAN.services', 'MEAN.controllers']
 
 MEAN.config ($stateProvider, $urlRouterProvider) ->
     $urlRouterProvider.otherwise '/'
@@ -15,35 +15,35 @@ MEAN.config ($stateProvider, $urlRouterProvider) ->
             views:
                 'main':
                     templateUrl: 'partials/signup.html'
-            constroller: 'AuthController'
+                    controller: 'AuthController'
             authenticate: false
         .state 'signin',
             url: '/signin'
             views:
                 'main':
                     templateUrl: 'partials/signin.html'
-            controller: 'AuthController'
+                    controller: 'AuthController'
             authenticate: false
         .state 'forgotten-password',
             url: '/forgotten-password'
             views:
                 'main':
                     templateUrl: 'partials/forgotten-password.html'
-            controller: 'AuthController'
+                    controller: 'AuthController'
             authenticate: false
         .state 'reset-password',
             url: '/reset-password/{forgot-code}'
             views:
                 'main':
                     templateUrl: 'partials/reset-password.html'
-            controller: 'AuthController'
+                    controller: 'AuthController'
             authenticate: false
         .state 'profile',
             url: '/profile'
             views:
                 'main':
                     templateUrl: 'partials/profile.html'
-            controller: 'UserController'
+                    controller: 'UserController'
             authenticate: false
     return
 
@@ -58,3 +58,6 @@ MEAN.run ($rootScope, $state, AuthService) ->
 
 angular.module 'MEAN.services', ['MEAN.services.auth']
 angular.module 'MEAN.services.auth', []
+
+angular.module 'MEAN.controllers', ['MEAN.controllers.auth']
+angular.module 'MEAN.controllers.auth', []

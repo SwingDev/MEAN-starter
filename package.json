@@ -10,7 +10,8 @@
     "start": "node-dev build/server/app.js",
     "test": "mocha --reporter spec --timeout 10000 --recursive build/server/test/",
     "e2e_test": "mocha-casperjs --reporter=spec --recursive build/server/e2e_test/*",
-    "debug": "node-debug build/server/app.js"
+    "debug": "node-debug build/server/app.js",
+    "lint": "coffeelint development/*"
   },
   "dependencies": {
     "async": "^0.9.0",
@@ -47,6 +48,7 @@
     "chai": "^1.9.1",
     "clean-css-brunch": "~1.7.1",
     "coffee-script-brunch": "~1.8.0",
+    "coffeelint": "^1.5.2",
     "css-brunch": "~1.7.0",
     "factory-lady": "^0.1.0",
     "gulp": "^3.7.0",

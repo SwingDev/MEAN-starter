@@ -77,16 +77,17 @@ module.controller 'AuthController', ($scope, $state, AuthService) ->
                 $scope.AuthService.resetPassword $scope.resetPasswordForm.user
                     .success (data) ->
                         # TODO : Success
+                        $scope.resetPasswordForm.user = {}
                         console.log data
                         return
                     .error (data) ->
                         # TODO : Error
+                        $scope.resetPasswordForm.user = {}
                         console.log data
                         return
             else
                 # TODO : Wrong password confirmation
-                $scope.signUpForm.user.password = ''
-                $scope.signUpForm.user.password_confirmation = ''
+                $scope.resetPasswordForm.user = {}
         else
             # TODO : Invalid form data
 

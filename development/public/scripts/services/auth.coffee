@@ -5,11 +5,7 @@ module.service 'AuthService', ($http) ->
     @user = {}
 
     signUp: (user) ->
-        promise = $http.post '/api/user/signup/', JSON.stringify {email: user.email, password: user.password, name: user.name}
-            .success (data) ->
-                console.log data
-                return
-            .error (data) ->
-                console.log data
-                return
-        return promise
+        $http.post '/api/user/signup/', JSON.stringify {email: user.email, password: user.password, name: user.name}
+
+    signIn: (user) ->
+        $http.post '/api/user/signin/', JSON.stringify user

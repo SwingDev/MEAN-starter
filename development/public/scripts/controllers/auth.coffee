@@ -11,6 +11,7 @@ module.controller 'AuthController', ($scope, AuthService) ->
                 $scope.AuthService.signUp $scope.signUpForm.user
                     .success (data) ->
                         # TODO : Success
+                        $scope.signUpForm.user = {}
                         console.log data
                         return
                     .error (data) ->
@@ -18,9 +19,12 @@ module.controller 'AuthController', ($scope, AuthService) ->
                         console.log data
                         return
             else
-                # TODO: Wrong password confirmation
+                # TODO : Wrong password confirmation
         else
-            # TODO: Invalid form data
+            # TODO : Invalid form data
+
+        $scope.signUpForm.user.password = ''
+        $scope.signUpForm.user.password_confirmation = ''
 
         return
 

@@ -13,5 +13,6 @@ npm install -g mocha-casperjs
 
 mkdir -p .data/db
 mkdir -p build
+export PATH=$PATH:/Users/jenkins/.npm/bin
 brunch build
 gulp compile

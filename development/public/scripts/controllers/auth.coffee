@@ -1,6 +1,6 @@
 module = angular.module 'MEAN.controllers.auth'
 
-module.controller 'AuthController', ($scope, AuthService) ->
+module.controller 'AuthController', ($scope, $state, AuthService) ->
 
     $scope.AuthService = AuthService
 
@@ -63,6 +63,30 @@ module.controller 'AuthController', ($scope, AuthService) ->
                     # TODO : Error
                     console.log data
                     return
+        else
+            # TODO : Invalid form data
+
+        return
+
+    $scope.resetPassword = () ->
+
+        if $scope.resetPasswordForm.$valid
+            if $scope.resetPasswordForm.user.password is $scope.resetPasswordForm.user.password_confirmation
+                $scope.resetPasswordForm.user.token = $state.params.forgotCode
+
+                $scope.AuthService.resetPassword $scope.resetPasswordForm.user
+                    .success (data) ->
+                        # TODO : Success
+                        console.log data
+                        return
+                    .error (data) ->
+                        # TODO : Error
+                        console.log data
+                        return
+            else
+                # TODO : Wrong password confirmation
+                $scope.signUpForm.user.password = ''
+                $scope.signUpForm.user.password_confirmation = ''
         else
             # TODO : Invalid form data
 

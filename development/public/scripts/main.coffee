@@ -32,7 +32,7 @@ MEAN.config ($stateProvider, $urlRouterProvider) ->
                     controller: 'AuthController'
             authenticate: false
         .state 'reset-password',
-            url: '/reset-password/{forgot-code}'
+            url: '/reset-password/{forgotCode}'
             views:
                 'main':
                     templateUrl: 'partials/reset-password.html'

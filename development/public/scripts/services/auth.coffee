@@ -12,3 +12,6 @@ module.service 'AuthService', ($http) ->
 
     forgottenPassword: (user) ->
         $http.post '/api/user/forgot/', JSON.stringify user
+
+    resetPassword: (user) ->
+        $http.post '/api/user/reset/', JSON.stringify user

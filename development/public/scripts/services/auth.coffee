@@ -9,3 +9,6 @@ module.service 'AuthService', ($http) ->
 
     signIn: (user) ->
         $http.post '/api/user/signin/', JSON.stringify user
+
+    forgottenPassword: (user) ->
+        $http.post '/api/user/forgot/', JSON.stringify user

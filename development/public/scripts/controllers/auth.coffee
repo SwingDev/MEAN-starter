@@ -51,4 +51,21 @@ module.controller 'AuthController', ($scope, AuthService) ->
 
         return
 
+    $scope.forgottenPassword = () ->
+
+        if $scope.forgottenPasswordForm.$valid
+            $scope.AuthService.forgottenPassword $scope.forgottenPasswordForm.user
+                .success (data) ->
+                    # TODO : Success
+                    console.log data
+                    return
+                .error (data) ->
+                    # TODO : Error
+                    console.log data
+                    return
+        else
+            # TODO : Invalid form data
+
+        return
+
     return

@@ -2,8 +2,6 @@ module = angular.module 'MEAN.services.auth'
 
 module.service 'AuthService', ($http) ->
 
-    @user = {}
-
     signUp: (user) ->
         $http.post '/api/user/signup/', JSON.stringify {email: user.email, password: user.password, name: user.name}
 

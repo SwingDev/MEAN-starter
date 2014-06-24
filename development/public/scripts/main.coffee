@@ -45,6 +45,27 @@ MEAN.config ($stateProvider, $urlRouterProvider) ->
                     templateUrl: 'partials/profile.html'
                     controller: 'UserController'
             authenticate: false
+        .state 'user-profile',
+            url: '/profile/{email}'
+            views:
+                'main':
+                    templateUrl: 'partials/profile.html'
+                    constroller: 'UserController'
+            authenticate: false
+        .state 'profile-edit',
+            url: '/profile/edit'
+            views:
+                'main':
+                    templateUrl: 'partials/profile-edit.html'
+                    controller: 'UserController'
+            authenticate: false
+        .state 'user-profile-edit',
+            url: '/profile/edit/{email}'
+            views:
+                'main':
+                    templateUrl: 'partials/profile-edit.html'
+                    controller: 'UserController'
+            authenticate: false
     return
 
 MEAN.run ($rootScope, $state, AuthService) ->
@@ -56,8 +77,10 @@ MEAN.run ($rootScope, $state, AuthService) ->
     return
 
 
-angular.module 'MEAN.services', ['MEAN.services.auth']
+angular.module 'MEAN.services', ['MEAN.services.auth', 'MEAN.services.user']
 angular.module 'MEAN.services.auth', []
+angular.module 'MEAN.services.user', []
 
-angular.module 'MEAN.controllers', ['MEAN.controllers.auth']
+angular.module 'MEAN.controllers', ['MEAN.controllers.auth', 'MEAN.controllers.user']
 angular.module 'MEAN.controllers.auth', []
+angular.module 'MEAN.controllers.user', []

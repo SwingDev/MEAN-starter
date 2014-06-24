@@ -33,16 +33,16 @@ exports.postLogin = (req, res, next) ->
     return
   passport.authenticate("local", (err, user, info) ->
     return next(err) if err
-    
+
     unless user
       res.json(403, {"error": info.message})
       return
-    
+
     req.logIn user, (err) ->
       return next(err) if err
       res.json(200, {"user": user})
       return
-    
+
     return
   ) req, res, next
   return
@@ -76,7 +76,7 @@ exports.postSignup = (req, res, next) ->
   req.assert("email", "Email is not valid").isEmail()
   req.assert("password", "Password must be at least 4 characters long").len 4
   validationErrors = req.validationErrors()
-  
+
   if validationErrors
     console.error(validationErrors)
     res.json(400, {"validationErrors": validationErrors})
@@ -145,7 +145,7 @@ exports.postForgot = (req, res, next) ->
         return
 
     (token, user, done) ->
-      if not (process.env.NODE_ENV in ['dev', 'test'])
+    #   if not (process.env.NODE_ENV in ['dev', 'test'])
         smtpTransport = mailer.createSmtpTransport()
         mailOptions =
           to: user.email
@@ -155,11 +155,11 @@ exports.postForgot = (req, res, next) ->
 
         smtpTransport.sendMail mailOptions, (err) ->
           done err, token
-      else
-        done null, token
-      
+    #   else
+    #     done null, token
+
   ], (err, token) ->
-    
+
     if err instanceof UserNotFoundError
       res.json(404, {"error": err.message})
       return
@@ -171,7 +171,7 @@ exports.postForgot = (req, res, next) ->
       console.log("Token: " + token)
       res.json(200, {"message": "Password reset email sent to " + req.body.email})
     return
-  
+
   return
 
 ###
@@ -219,7 +219,7 @@ exports.getUser = (req, res, next) ->
     if req.user.email == req.params.email
       res.json(200, {"user": req.user})
       return
-    
+
     if req.user.isAdmin
       User.findOne {email: req.params.email}, (err, user) ->
         return next(err) if err
@@ -230,7 +230,7 @@ exports.getUser = (req, res, next) ->
       return
 
   res.json(403, {})
-  
+
 exports.patchUser = (req, res, next) ->
   req.assert("email", "You need to say email of the user you want to change").isEmail()
   validationErrors = req.validationErrors()
@@ -240,10 +240,10 @@ exports.patchUser = (req, res, next) ->
 
   if req.isAuthenticated()
     if req.user.email == req.params.email or req.user.isAdmin
-      
+
       if 'isAdmin' of req.body and not req.user.isAdmin
         return res.json(403, {"error": "Only admin can make new admins."})
-      
+
       User.findOne {email: req.params.email}, (err, user) ->
         return next(err) if err
         return  res.json(404, {error: "Can't find user with email: " + req.params.email}) if not user
@@ -251,7 +251,7 @@ exports.patchUser = (req, res, next) ->
         , (err, user) ->
           return next(err) if err
           return res.json(200, {"user": user})
-            
+
       return
   res.json(403, {})
 
@@ -353,4 +353,3 @@ exports.getOauthUnlink = (req, res, next) ->
     return
 
   return
-

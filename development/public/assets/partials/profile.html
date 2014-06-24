@@ -3,25 +3,20 @@
 
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h1 class="panel-title">Account settings</h1>
+                <h1 class="panel-title">{{UserService.current.profile.name}}</h1>
             </div>
             <div class="panel-body">
-                <form name="updateUserForm" role="form">
-                    <div class="form-group">
-                        <input type="text" class="form-control" ng-model="AuthService.user.profile.first_name" placeholder="First name">
-                    </div>
-                    <div class="form-group">
-                        <input type="text" class="form-control" ng-model="AuthService.user.profile.last_name" placeholder="Last name">
-                    </div>
-                    <div class="form-group">
-                        <input type="text" class="form-control" ng-model="AuthService.user.name" placeholder="User name" required disabled>
-                    </div>
-                    <div class="form-group">
-                        <input type="email" class="form-control" ng-model="AuthService.user.email" placeholder="E-mail" required>
-                    </div>
-                    <p class="help-block"><small>To change password, use the <a ui-sref="forgotten-password">Forgotten password</a> form</p>
-                    <button type="submit" class="btn btn-primary" ng-click="updateUser()">Update</button>
-                </form>
+                <img src="{{UserService.current.profile.picture}}" class="img-rounded" style="width: 140px; height: 140px; background-color: #EEE; border: 0px;">
+                <dl>
+                    <dt>E-mail</dt>
+                    <dd>{{UserService.current.email}}</dd>
+                    <dt>Website</dt>
+                    <dd>{{UserService.current.profile.website}}</dd>
+                    <dt>Location</dt>
+                    <dd>{{UserService.current.profile.location}}</dd>
+                    <dt>Gender</dt>
+                    <dd>{{UserService.current.profile.gender}}</dd>
+                </dl>
             </div>
         </div>
 

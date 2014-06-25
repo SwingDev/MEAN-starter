@@ -50,7 +50,7 @@ MEAN.config ($stateProvider, $urlRouterProvider) ->
       views:
         'main':
           templateUrl: 'partials/profile.html'
-          constroller: 'UserController'
+          controller: 'UserController'
       authenticate: false
     .state 'profile-edit',
       url: '/profile/edit'

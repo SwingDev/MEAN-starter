@@ -145,7 +145,7 @@ exports.postForgot = (req, res, next) ->
         return
 
     (token, user, done) ->
-    #   if not (process.env.NODE_ENV in ['dev', 'test'])
+      if not (process.env.NODE_ENV in ['dev', 'test'])
         smtpTransport = mailer.createSmtpTransport()
         mailOptions =
           to: user.email
@@ -155,8 +155,8 @@ exports.postForgot = (req, res, next) ->
 
         smtpTransport.sendMail mailOptions, (err) ->
           done err, token
-    #   else
-    #     done null, token
+      else
+        done null, token
 
   ], (err, token) ->
 

@@ -3,19 +3,19 @@
 
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h1 class="panel-title">{{UserService.current.profile.name}}</h1>
+        <h1 class="panel-title">{{UserService.user.profile.name}}</h1>
       </div>
       <div class="panel-body">
-        <img src="{{UserService.current.profile.picture}}" class="img-rounded" style="width: 140px; height: 140px; background-color: #EEE; border: 0px;">
+        <img src="{{UserService.user.profile.picture}}" class="img-rounded" style="width: 140px; height: 140px; background-color: #EEE; border: 0px;">
         <dl>
           <dt>E-mail</dt>
-          <dd>{{UserService.current.email}}</dd>
+          <dd>{{UserService.user.email}}</dd>
           <dt>Website</dt>
-          <dd>{{UserService.current.profile.website}}</dd>
+          <dd>{{UserService.user.profile.website}}</dd>
           <dt>Location</dt>
-          <dd>{{UserService.current.profile.location}}</dd>
+          <dd>{{UserService.user.profile.location}}</dd>
           <dt>Gender</dt>
-          <dd>{{UserService.current.profile.gender}}</dd>
+          <dd>{{UserService.user.profile.gender}}</dd>
         </dl>
       </div>
     </div>

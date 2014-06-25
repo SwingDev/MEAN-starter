@@ -1,0 +1,38 @@
+<div class="row">
+  <div class="col-xs-4 col-xs-offset-4">
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h1 class="panel-title">Profile edit</h1>
+      </div>
+      <div class="panel-body">
+        <form name="UserService.user" role="form">
+          <div class="form-group">
+            <input type="url" class="form-control" ng-model="UserService.user.profile.picture" placeholder="Picture URL">
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control" ng-model="UserService.user.profile.name" placeholder="Name">
+          </div>
+          <div class="form-group">
+            <input type="email" class="form-control" ng-model="UserService.user.email" placeholder="E-mail" required disabled>
+          </div>
+          <div class="form-group">
+            <input type="url" class="form-control" ng-model="UserService.user.profile.website" placeholder="Website">
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control" ng-model="UserService.user.profile.location" placeholder="Location">
+          </div>
+          <div class="form-group">
+            <select ng-model="UserService.user.profile.gender" class="form-control">
+              <option value="">Gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary" ng-click="updateUser(UserService.user)">Save</button>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>

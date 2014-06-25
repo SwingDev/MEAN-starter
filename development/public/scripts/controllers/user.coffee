@@ -8,9 +8,7 @@ module.controller 'UserController', ($scope, $state, UserService, AuthService) -
   @init = () ->
     $scope.getCurrent()
 
-    console.log $state
-
-    if $state.params.email?
+    if $state.params.email? and $state.params.email != ''
       $scope.getUser $state.params.email
     return
 
@@ -30,6 +28,17 @@ module.controller 'UserController', ($scope, $state, UserService, AuthService) -
     $scope.UserService.getUser email
       .success (data) ->
         $scope.UserService.user = data.user
+        return
+      .error (data) ->
+        # TODO : Error
+        console.log data
+        return
+    return
+
+  $scope.updateUser = (user) ->
+    $scope.UserService.updateUser user
+      .success (data) ->
+        $scope.UserService.user = user
         return
       .error (data) ->
         # TODO : Error

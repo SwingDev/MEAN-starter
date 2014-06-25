@@ -53,14 +53,14 @@ MEAN.config ($stateProvider, $urlRouterProvider) ->
           controller: 'UserController'
       authenticate: false
     .state 'profile-edit',
-      url: '/profile/edit'
+      url: '/profile-edit'
       views:
         'main':
           templateUrl: 'partials/profile-edit.html'
           controller: 'UserController'
       authenticate: false
     .state 'user-profile-edit',
-      url: '/profile/edit/{email}'
+      url: '/profile-edit/{email}'
       views:
         'main':
           templateUrl: 'partials/profile-edit.html'

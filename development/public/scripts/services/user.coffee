@@ -2,7 +2,7 @@ module = angular.module 'MEAN.services.user'
 
 module.service 'UserService', ($http) ->
 
-    @current = {}
+  @current = {}
 
-    getCurrent: () ->
-        $http.get '/api/user/current/'
+  getCurrent: () ->
+    $http.get '/api/user/current/'

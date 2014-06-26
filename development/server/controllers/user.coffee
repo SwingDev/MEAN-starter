@@ -125,7 +125,9 @@ exports.postForgot = (req, res, next) ->
   req.assert("email", "Please enter a valid email address.").isEmail()
   validationErrors = req.validationErrors()
   if validationErrors
-    res.json(400, {"validationErrors": validationErrors})
+    validationErrors[0].message = validationErrors[0].msg
+    delete validationErrors[0].msg
+    res.json(400, { ok: false, message: validationErrors[0].message, error: validationErrors[0]})
     return
 
   async.waterfall [
@@ -165,15 +167,15 @@ exports.postForgot = (req, res, next) ->
   ], (err, token) ->
 
     if err instanceof UserNotFoundError
-      res.json(404, {"error": err.message})
+      res.json(404, { ok: false, message: err.message })
       return
     else if err then return next(err)
 
     if process.env.NODE_ENV == "test"
-      res.json(200, {"message": "Password reset email sent to " + req.body.email, "token": token})
+      res.json(200, { ok: true, message: "Password reset email sent to " + req.body.email, token: token })
     else
       console.log("Token: " + token)
-      res.json(200, {"message": "Password reset email sent to " + req.body.email})
+      res.json(200, { ok: true, message: "Password reset email sent to " + req.body.email })
     return
 
   return

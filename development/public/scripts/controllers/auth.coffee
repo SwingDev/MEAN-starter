@@ -1,8 +1,9 @@
 module = angular.module 'MEAN.controllers.auth'
 
-module.controller 'AuthController', ($scope, $state, AuthService) ->
+module.controller 'AuthController', ($scope, $state, AuthService, AlertService) ->
 
   $scope.AuthService = AuthService
+  $scope.AlertService = AlertService
 
   $scope.signUp = () ->
 
@@ -29,7 +30,7 @@ module.controller 'AuthController', ($scope, $state, AuthService) ->
       $scope.signUpForm.user.password = ''
       $scope.signUpForm.user.password_confirmation = ''
 
-  return
+    return
 
   $scope.signIn = () ->
 

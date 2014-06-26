@@ -191,13 +191,15 @@ exports.postReset = (req, res, next) ->
   req.assert("token", "Token can't be empty").len 1
   validationErrors = req.validationErrors()
   if validationErrors
-    res.json(400, {"validationErrors": validationErrors})
+    validationErrors[0].message = validationErrors[0].msg
+    delete validationErrors[0].msg
+    res.json(400, { ok: false, message: validationErrors[0].message, error: validationErrors[0] })
     return
 
   User.findOne(resetPasswordToken: req.body.token).where("resetPasswordExpires").gt(Date.now()).exec (err, user) ->
     return next(err) if err
     if not user
-      res.json(404, {error: "Can't find token: " + req.body.token})
+      res.json(404, { ok: false, message: "Can't find token: " + req.body.token })
       return
     else
       user.password = req.body.password
@@ -207,7 +209,7 @@ exports.postReset = (req, res, next) ->
         return next(err) if err
         req.logIn user, (err) ->
           return next(err) if err
-          res.json(200, {"message": "Password updated."})
+          res.json(200, { ok: true, message: "Password updated." })
           return
         return
       return

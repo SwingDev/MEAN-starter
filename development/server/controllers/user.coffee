@@ -31,7 +31,7 @@ exports.postLogin = (req, res, next) ->
   if validationErrors
     validationErrors[0].message = validationErrors[0].msg
     delete validationErrors[0].msg
-    res.json(400, { ok: false, message: validationErrors[0].message, error: validationErrors[0] })
+    res.json(400, { ok: false, message: 'Invalid e-mail or password.', errors: validationErrors })
     return
   passport.authenticate("local", (err, user, info) ->
     return next(err) if err
@@ -83,7 +83,7 @@ exports.postSignup = (req, res, next) ->
     console.error(validationErrors)
     validationErrors[0].message = validationErrors[0].msg
     delete validationErrors[0].msg
-    res.json(400, { ok: false, message: validationErrors[0].message, error: validationErrors[0] })
+    res.json(400, { ok: false, message: 'Invalid e-mail or password.', errors: validationErrors })
     return
 
   user = new User(
@@ -127,7 +127,7 @@ exports.postForgot = (req, res, next) ->
   if validationErrors
     validationErrors[0].message = validationErrors[0].msg
     delete validationErrors[0].msg
-    res.json(400, { ok: false, message: validationErrors[0].message, error: validationErrors[0]})
+    res.json(400, { ok: false, message: 'Invalid e-mail address.', error: validationErrors[0]})
     return
 
   async.waterfall [
@@ -193,7 +193,7 @@ exports.postReset = (req, res, next) ->
   if validationErrors
     validationErrors[0].message = validationErrors[0].msg
     delete validationErrors[0].msg
-    res.json(400, { ok: false, message: validationErrors[0].message, error: validationErrors[0] })
+    res.json(400, { ok: false, message: 'Invalid password or token.', error: validationErrors[0] })
     return
 
   User.findOne(resetPasswordToken: req.body.token).where("resetPasswordExpires").gt(Date.now()).exec (err, user) ->
@@ -222,7 +222,7 @@ exports.getUser = (req, res, next) ->
   if validationErrors
     validationErrors[0].message = validationErrors[0].msg
     delete validationErrors[0].msg
-    res.json(400, { ok: false, message: validationErrors[0].message, error: validationErrors[0] })
+    res.json(400, { ok: false, message: 'Please select e-mail address of the user.', error: validationErrors[0] })
     return
 
   if req.isAuthenticated()
@@ -238,7 +238,7 @@ exports.getUser = (req, res, next) ->
         else
           res.json(404, { ok: false, message: "Can't find user with email: " + req.params.email })
       return
-  res.json(403, {}) # ??
+  res.json(403, { ok: false, message: 'You must to be signed in.' })
 
 exports.patchUser = (req, res, next) ->
   req.assert("email", "You need to say email of the user you want to change").isEmail()
@@ -246,7 +246,7 @@ exports.patchUser = (req, res, next) ->
   if validationErrors
     validationErrors[0].message = validationErrors[0].msg
     delete validationErrors[0].msg
-    res.json(400, { ok: false, message: validationErrors[0].message, error: validationErrors[0] })
+    res.json(400, { ok: false, message: 'Please select e-mail address of the user.', error: validationErrors[0] })
     return
 
   if req.isAuthenticated()
@@ -264,7 +264,7 @@ exports.patchUser = (req, res, next) ->
           return res.json(200, { ok: true, message: 'User profile updated.', user: user })
 
       return
-  res.json(403, {}) # ??
+  res.json(403, { ok: false, message: 'You must to be signed in.' })
 
 
 exports.deleteUser = (req, res, next) ->
@@ -273,7 +273,7 @@ exports.deleteUser = (req, res, next) ->
   if validationErrors
     validationErrors[0].message = validationErrors[0].msg
     delete validationErrors[0].msg
-    res.json(400, { ok: false, message: validationErrors[0].message, error: validationErrors[0] })
+    res.json(400, { ok: false, message: 'Please select e-mail address of the user.', error: validationErrors[0] })
     return
 
   if req.isAuthenticated()
@@ -283,7 +283,7 @@ exports.deleteUser = (req, res, next) ->
         req.logout() if not req.user.isAdmin
         res.json(200, { ok: true, message: "Account " + req.params.email + " has been removed." })
       return
-  res.json(403, {}) # ??
+  res.json(403, { ok: false, message: 'You must to be signed in.' })
 
 ###
 ~~~~~~~~~~~~~~~~~~~~ Changed to API until this point ~~~~~~~~~~~~~~~~~~~~~~~

@@ -4,6 +4,7 @@ module.controller 'UserController', ($scope, $state, UserService, AuthService, A
 
   $scope.UserService = UserService
   $scope.AuthService = AuthService
+  $scope.AlertService = AlertService
 
   @init = () ->
     $scope.getCurrent()
@@ -19,7 +20,6 @@ module.controller 'UserController', ($scope, $state, UserService, AuthService, A
         $scope.UserService.user = data.user
         return
       .error (data) ->
-        $scope.AlertServce.add 'danger', data.message
         return
     return
 
@@ -29,7 +29,7 @@ module.controller 'UserController', ($scope, $state, UserService, AuthService, A
         $scope.UserService.user = data.user
         return
       .error (data) ->
-        $scope.AlertServce.add 'danger', data.message
+        $scope.AlertService.add 'danger', data.message
         return
     return
 
@@ -37,10 +37,10 @@ module.controller 'UserController', ($scope, $state, UserService, AuthService, A
     $scope.UserService.updateUser user
       .success (data) ->
         $scope.UserService.user = user
-        $scope.AlertServce.add 'success', data.message
+        $scope.AlertService.add 'success', data.message
         return
       .error (data) ->
-        $scope.AlertServce.add 'danger', data.message
+        $scope.AlertService.add 'danger', data.message
         return
     return
 

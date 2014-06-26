@@ -79,7 +79,9 @@ exports.postSignup = (req, res, next) ->
 
   if validationErrors
     console.error(validationErrors)
-    res.json(400, {"validationErrors": validationErrors})
+    validationErrors[0].message = validationErrors[0].msg
+    delete validationErrors[0].msg
+    res.json(400, { ok: false, message: validationErrors[0].message, error: validationErrors[0] })
     return
 
   user = new User(
@@ -93,7 +95,7 @@ exports.postSignup = (req, res, next) ->
   , (err, existingUser) ->
     if existingUser
       console.error("Account with that email address already exists: " + req.body.email)
-      res.json(400, {"validationErrors": "Account with that email address already exists: " + req.body.email})
+      res.json(400, { ok: false, message: "Account with that email address already exists: " + req.body.email })
       return
 
       # req.flash "errors",
@@ -103,7 +105,7 @@ exports.postSignup = (req, res, next) ->
       return next(err) if err
       req.logIn user, (err) ->
         return next(err) if err
-        res.json(202, {"info": "User " + user.email + " created."})
+        res.json(202, { ok: true, message: "User " + user.email + " created.", user: user })
         return
 
       return

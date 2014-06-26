@@ -11,24 +11,26 @@ module.controller 'AuthController', ($scope, $state, AuthService, AlertService) 
       if $scope.signUpForm.user.password is $scope.signUpForm.user.password_confirmation
         $scope.AuthService.signUp $scope.signUpForm.user
           .success (data) ->
-            # TODO : Success
+            # TODO : Event for main controller
             $scope.signUpForm.user = {}
-            console.log data
+            $scope.AlertService.add 'success', data.message
             return
           .error (data) ->
-            # TODO : Error
             $scope.signUpForm.user.password = ''
             $scope.signUpForm.user.password_confirmation = ''
-            console.log data
+            $scope.signUpForm.password.$pristine = true
+            $scope.signUpForm.password_confirmation.$pristine = true
+            $scope.AlertService.add 'danger', data.message
             return
       else
-        # TODO : Wrong password confirmation
+        $scope.signUpForm.password_confirmation.match = false
+    else
+      if $scope.signUpForm.$pristine
+        $scope.AlertService.add 'danger', 'Please enter e-mail and password.'
         $scope.signUpForm.user.password = ''
         $scope.signUpForm.user.password_confirmation = ''
-    else
-      # TODO : Invalid form data
-      $scope.signUpForm.user.password = ''
-      $scope.signUpForm.user.password_confirmation = ''
+        $scope.signUpForm.password.$pristine = true
+        $scope.signUpForm.password_confirmation.$pristine = true
 
     return
 
@@ -38,12 +40,12 @@ module.controller 'AuthController', ($scope, $state, AuthService, AlertService) 
         .success (data) ->
           # TODO : Event for main controller
           $scope.signInForm.user = {}
-          $scope.AlertService.add 'success', 'Welcome'
+          $scope.AlertService.add 'success', data.message
           return
         .error (data) ->
           $scope.signInForm.user.password = ''
           $scope.signInForm.password.$pristine = true
-          $scope.AlertService.add 'danger', data.error
+          $scope.AlertService.add 'danger', data.message
           return
     else
       if $scope.signInForm.$pristine
@@ -60,15 +62,14 @@ module.controller 'AuthController', ($scope, $state, AuthService, AlertService) 
     if $scope.forgottenPasswordForm.$valid
       $scope.AuthService.forgottenPassword $scope.forgottenPasswordForm.user
         .success (data) ->
-          # TODO : Success
-          console.log data
+          $scope.AlertService.add 'success', data.message
           return
         .error (data) ->
-          # TODO : Error
-          console.log data
+          $scope.AlertService.add 'danger', data.message
           return
     else
-      # TODO : Invalid form data
+      if $scope.forgottenPasswordForm.$pristine
+        $scope.AlertService.add 'danger', 'Please enter e-mail.'
 
     return
 
@@ -80,20 +81,18 @@ module.controller 'AuthController', ($scope, $state, AuthService, AlertService) 
 
         $scope.AuthService.resetPassword $scope.resetPasswordForm.user
           .success (data) ->
-            # TODO : Success
+            $scope.AlertService.add 'success', data.message
             $scope.resetPasswordForm.user = {}
-            console.log data
             return
           .error (data) ->
-            # TODO : Error
+            $scope.AlertService.add 'danger', data.message
             $scope.resetPasswordForm.user = {}
-            console.log data
             return
       else
-        # TODO : Wrong password confirmation
-        $scope.resetPasswordForm.user = {}
+        $scope.resetPasswordForm.password_confirmation.match = false
     else
-      # TODO : Invalid form data
+      if $scope.resetPasswordForm.$pristine
+        $scope.AlertService.add 'danger', 'Please enter password.'
 
     return
 

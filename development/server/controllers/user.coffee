@@ -220,55 +220,60 @@ exports.getUser = (req, res, next) ->
   req.assert("email", "You need to say email of the user you want to get").isEmail()
   validationErrors = req.validationErrors()
   if validationErrors
-    res.json(400, {"validationErrors": validationErrors})
+    validationErrors[0].message = validationErrors[0].msg
+    delete validationErrors[0].msg
+    res.json(400, { ok: false, message: validationErrors[0].message, error: validationErrors[0] })
     return
 
   if req.isAuthenticated()
     if req.user.email == req.params.email
-      res.json(200, {"user": req.user})
+      res.json(200, { ok: true, user: req.user })
       return
 
     if req.user.isAdmin
       User.findOne {email: req.params.email}, (err, user) ->
         return next(err) if err
         if user
-          res.json(200, {"user": user})
+          res.json(200, { ok: true, user: user })
         else
-          res.json(404, {error: "Can't find user with email: " + req.params.email})
+          res.json(404, { ok: false, message: "Can't find user with email: " + req.params.email })
       return
-
-  res.json(403, {})
+  res.json(403, {}) # ??
 
 exports.patchUser = (req, res, next) ->
   req.assert("email", "You need to say email of the user you want to change").isEmail()
   validationErrors = req.validationErrors()
   if validationErrors
-    res.json(400, {"validationErrors": validationErrors})
+    validationErrors[0].message = validationErrors[0].msg
+    delete validationErrors[0].msg
+    res.json(400, { ok: false, message: validationErrors[0].message, error: validationErrors[0] })
     return
 
   if req.isAuthenticated()
     if req.user.email == req.params.email or req.user.isAdmin
 
       if 'isAdmin' of req.body and not req.user.isAdmin
-        return res.json(403, {"error": "Only admin can make new admins."})
+        return res.json(403, { ok: false, message: "Only admin can make new admins." })
 
       User.findOne {email: req.params.email}, (err, user) ->
         return next(err) if err
-        return  res.json(404, {error: "Can't find user with email: " + req.params.email}) if not user
+        return  res.json(404, { ok: false, message: "Can't find user with email: " + req.params.email }) if not user
         user.updateDocument req.body
         , (err, user) ->
           return next(err) if err
-          return res.json(200, {"user": user})
+          return res.json(200, { ok: true, user: user })
 
       return
-  res.json(403, {})
+  res.json(403, {}) # ??
 
 
 exports.deleteUser = (req, res, next) ->
   req.assert("email", "You need to say email of the user you want to remove").isEmail()
   validationErrors = req.validationErrors()
   if validationErrors
-    res.json(400, {"validationErrors": validationErrors})
+    validationErrors[0].message = validationErrors[0].msg
+    delete validationErrors[0].msg
+    res.json(400, { ok: false, message: validationErrors[0].message, error: validationErrors[0] })
     return
 
   if req.isAuthenticated()
@@ -276,9 +281,9 @@ exports.deleteUser = (req, res, next) ->
       User.remove {email: req.params.email}, (err) ->
         return next(err) if err
         req.logout() if not req.user.isAdmin
-        res.json(200, {"message": "Account " + req.params.email + " has been removed."})
+        res.json(200, { ok: true, message: "Account " + req.params.email + " has been removed." })
       return
-  res.json(403, {})
+  res.json(403, {}) # ??
 
 ###
 ~~~~~~~~~~~~~~~~~~~~ Changed to API until this point ~~~~~~~~~~~~~~~~~~~~~~~

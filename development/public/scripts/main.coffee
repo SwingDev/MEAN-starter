@@ -85,10 +85,12 @@ MEAN.run ($rootScope, $state, AuthService) ->
   return
 
 
-angular.module 'MEAN.services', ['MEAN.services.auth', 'MEAN.services.user']
+angular.module 'MEAN.services', ['MEAN.services.auth', 'MEAN.services.user', 'MEAN.services.alert']
 angular.module 'MEAN.services.auth', []
 angular.module 'MEAN.services.user', []
+angular.module 'MEAN.services.alert', []
 
-angular.module 'MEAN.controllers', ['MEAN.controllers.auth', 'MEAN.controllers.user']
+angular.module 'MEAN.controllers', ['MEAN.controllers.auth', 'MEAN.controllers.user', 'MEAN.controllers.alert']
 angular.module 'MEAN.controllers.auth', []
 angular.module 'MEAN.controllers.user', []
+angular.module 'MEAN.controllers.alert', []

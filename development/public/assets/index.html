@@ -13,7 +13,13 @@
 
   <body>
 
-    <main class="container" ui-view="main"></main>
+    <!-- Alerts -->
+    <div class="container" ng-controller="AlertController">
+        <alert ng-repeat="alert in AlertService.alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.message}}</alert>
+    </div><!-- /end Alerts -->
+
+    <!-- Content -->
+    <main class="container" ui-view="main"></main><!-- /end Content -->
 
     <!-- JavaScript includes -->
     <script type="text/javascript" src="scripts/vendor.js"></script>

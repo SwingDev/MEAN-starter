@@ -29,8 +29,6 @@ exports.postLogin = (req, res, next) ->
   req.assert("password", "Password cannot be blank").notEmpty()
   validationErrors = req.validationErrors()
   if validationErrors
-    validationErrors[0].message = validationErrors[0].msg
-    delete validationErrors[0].msg
     res.json(400, { ok: false, message: 'Invalid e-mail or password.', errors: validationErrors })
     return
   passport.authenticate("local", (err, user, info) ->
@@ -80,9 +78,6 @@ exports.postSignup = (req, res, next) ->
   validationErrors = req.validationErrors()
 
   if validationErrors
-    console.error(validationErrors)
-    validationErrors[0].message = validationErrors[0].msg
-    delete validationErrors[0].msg
     res.json(400, { ok: false, message: 'Invalid e-mail or password.', errors: validationErrors })
     return
 
@@ -125,9 +120,7 @@ exports.postForgot = (req, res, next) ->
   req.assert("email", "Please enter a valid email address.").isEmail()
   validationErrors = req.validationErrors()
   if validationErrors
-    validationErrors[0].message = validationErrors[0].msg
-    delete validationErrors[0].msg
-    res.json(400, { ok: false, message: 'Invalid e-mail address.', error: validationErrors[0]})
+    res.json(400, { ok: false, message: 'Invalid e-mail address.', errors: validationErrors })
     return
 
   async.waterfall [
@@ -191,9 +184,7 @@ exports.postReset = (req, res, next) ->
   req.assert("token", "Token can't be empty").len 1
   validationErrors = req.validationErrors()
   if validationErrors
-    validationErrors[0].message = validationErrors[0].msg
-    delete validationErrors[0].msg
-    res.json(400, { ok: false, message: 'Invalid password or token.', error: validationErrors[0] })
+    res.json(400, { ok: false, message: 'Invalid password or token.', error: validationErrors })
     return
 
   User.findOne(resetPasswordToken: req.body.token).where("resetPasswordExpires").gt(Date.now()).exec (err, user) ->
@@ -220,9 +211,7 @@ exports.getUser = (req, res, next) ->
   req.assert("email", "You need to say email of the user you want to get").isEmail()
   validationErrors = req.validationErrors()
   if validationErrors
-    validationErrors[0].message = validationErrors[0].msg
-    delete validationErrors[0].msg
-    res.json(400, { ok: false, message: 'Please select e-mail address of the user.', error: validationErrors[0] })
+    res.json(400, { ok: false, message: 'Please select e-mail address of the user.', error: validationErrors })
     return
 
   if req.isAuthenticated()
@@ -244,9 +233,7 @@ exports.patchUser = (req, res, next) ->
   req.assert("email", "You need to say email of the user you want to change").isEmail()
   validationErrors = req.validationErrors()
   if validationErrors
-    validationErrors[0].message = validationErrors[0].msg
-    delete validationErrors[0].msg
-    res.json(400, { ok: false, message: 'Please select e-mail address of the user.', error: validationErrors[0] })
+    res.json(400, { ok: false, message: 'Please select e-mail address of the user.', error: validationErrors })
     return
 
   if req.isAuthenticated()
@@ -271,9 +258,7 @@ exports.deleteUser = (req, res, next) ->
   req.assert("email", "You need to say email of the user you want to remove").isEmail()
   validationErrors = req.validationErrors()
   if validationErrors
-    validationErrors[0].message = validationErrors[0].msg
-    delete validationErrors[0].msg
-    res.json(400, { ok: false, message: 'Please select e-mail address of the user.', error: validationErrors[0] })
+    res.json(400, { ok: false, message: 'Please select e-mail address of the user.', error: validationErrors })
     return
 
   if req.isAuthenticated()

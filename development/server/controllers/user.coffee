@@ -29,18 +29,20 @@ exports.postLogin = (req, res, next) ->
   req.assert("password", "Password cannot be blank").notEmpty()
   validationErrors = req.validationErrors()
   if validationErrors
-    res.json(400, {'validationErrors': validationErrors})
+    validationErrors[0].message = validationErrors[0].msg
+    delete validationErrors[0].msg
+    res.json(400, { ok: false, message: validationErrors[0].message, error: validationErrors[0] })
     return
   passport.authenticate("local", (err, user, info) ->
     return next(err) if err
 
     unless user
-      res.json(403, {"error": info.message})
+      res.json(403, { ok: false, message: info.message })
       return
 
     req.logIn user, (err) ->
       return next(err) if err
-      res.json(200, {"user": user})
+      res.json(200, { ok: true, message: 'You are signed in.', user: user })
       return
 
     return

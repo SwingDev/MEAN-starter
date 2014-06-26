@@ -1,6 +1,6 @@
 module = angular.module 'MEAN.controllers.user'
 
-module.controller 'UserController', ($scope, $state, UserService, AuthService) ->
+module.controller 'UserController', ($scope, $state, UserService, AuthService, AlertService) ->
 
   $scope.UserService = UserService
   $scope.AuthService = AuthService
@@ -19,8 +19,7 @@ module.controller 'UserController', ($scope, $state, UserService, AuthService) -
         $scope.UserService.user = data.user
         return
       .error (data) ->
-        # TODO : Error
-        console.log data
+        $scope.AlertServce.add 'danger', data.message
         return
     return
 
@@ -30,8 +29,7 @@ module.controller 'UserController', ($scope, $state, UserService, AuthService) -
         $scope.UserService.user = data.user
         return
       .error (data) ->
-        # TODO : Error
-        console.log data
+        $scope.AlertServce.add 'danger', data.message
         return
     return
 
@@ -39,10 +37,10 @@ module.controller 'UserController', ($scope, $state, UserService, AuthService) -
     $scope.UserService.updateUser user
       .success (data) ->
         $scope.UserService.user = user
+        $scope.AlertServce.add 'success', data.message
         return
       .error (data) ->
-        # TODO : Error
-        console.log data
+        $scope.AlertServce.add 'danger', data.message
         return
     return
 

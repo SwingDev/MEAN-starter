@@ -33,22 +33,25 @@ module.controller 'AuthController', ($scope, $state, AuthService, AlertService) 
     return
 
   $scope.signIn = () ->
-
     if $scope.signInForm.$valid
       $scope.AuthService.signIn $scope.signInForm.user
         .success (data) ->
-          # TODO : Success
+          # TODO : Event for main controller
           $scope.signInForm.user = {}
-          console.log data
+          $scope.AlertService.add 'success', 'Welcome'
           return
         .error (data) ->
-          # TODO : Error
           $scope.signInForm.user.password = ''
-          console.log data
+          $scope.signInForm.password.$pristine = true
+          $scope.AlertService.add 'danger', data.error
           return
     else
-      # TODO : Invalid form data
-      $scope.signInForm.user.password = ''
+      if $scope.signInForm.$pristine
+        $scope.AlertService.add 'danger', 'Please enter e-mail and password.'
+
+      if $scope.signInForm.user?
+        $scope.signInForm.user.password = ''
+        $scope.signInForm.password.$pristine = true
 
     return
 

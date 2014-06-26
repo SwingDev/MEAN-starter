@@ -1,4 +1,4 @@
-MEAN = angular.module 'MEAN', ['ui.router', 'MEAN.services', 'MEAN.controllers']
+MEAN = angular.module 'MEAN', ['ui.router', 'ui.bootstrap', 'MEAN.services', 'MEAN.controllers']
 
 MEAN.config ($stateProvider, $urlRouterProvider) ->
   $urlRouterProvider.otherwise '/'
@@ -10,6 +10,7 @@ MEAN.config ($stateProvider, $urlRouterProvider) ->
         'main':
           templateUrl: 'partials/home.html'
       authenticate: false
+
     .state 'signup',
       url: '/signup'
       views:
@@ -17,6 +18,7 @@ MEAN.config ($stateProvider, $urlRouterProvider) ->
           templateUrl: 'partials/signup.html'
           controller: 'AuthController'
       authenticate: false
+
     .state 'signin',
       url: '/signin'
       views:
@@ -24,6 +26,7 @@ MEAN.config ($stateProvider, $urlRouterProvider) ->
           templateUrl: 'partials/signin.html'
           controller: 'AuthController'
       authenticate: false
+
     .state 'forgotten-password',
       url: '/forgotten-password'
       views:
@@ -31,6 +34,7 @@ MEAN.config ($stateProvider, $urlRouterProvider) ->
           templateUrl: 'partials/forgotten-password.html'
           controller: 'AuthController'
       authenticate: false
+
     .state 'reset-password',
       url: '/reset-password/{forgotCode}'
       views:
@@ -38,6 +42,7 @@ MEAN.config ($stateProvider, $urlRouterProvider) ->
           templateUrl: 'partials/reset-password.html'
           controller: 'AuthController'
       authenticate: false
+
     .state 'profile',
       url: '/profile'
       views:
@@ -45,25 +50,28 @@ MEAN.config ($stateProvider, $urlRouterProvider) ->
           templateUrl: 'partials/profile.html'
           controller: 'UserController'
       authenticate: false
+
+    .state 'user-profile-edit',
+      url: '/profile/edit/{email}'
+      views:
+        'main':
+          templateUrl: 'partials/profile-edit.html'
+          controller: 'UserController'
+      authenticate: false
+
+    .state 'profile-edit',
+      url: '/profile/edit'
+      views:
+        'main':
+          templateUrl: 'partials/profile-edit.html'
+          controller: 'UserController'
+      authenticate: false
+
     .state 'user-profile',
       url: '/profile/{email}'
       views:
         'main':
           templateUrl: 'partials/profile.html'
-          controller: 'UserController'
-      authenticate: false
-    .state 'profile-edit',
-      url: '/profile-edit'
-      views:
-        'main':
-          templateUrl: 'partials/profile-edit.html'
-          controller: 'UserController'
-      authenticate: false
-    .state 'user-profile-edit',
-      url: '/profile-edit/{email}'
-      views:
-        'main':
-          templateUrl: 'partials/profile-edit.html'
           controller: 'UserController'
       authenticate: false
   return

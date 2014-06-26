@@ -257,11 +257,11 @@ exports.patchUser = (req, res, next) ->
 
       User.findOne {email: req.params.email}, (err, user) ->
         return next(err) if err
-        return  res.json(404, { ok: false, message: "Can't find user with email: " + req.params.email }) if not user
+        return res.json(404, { ok: false, message: "Can't find user with email: " + req.params.email }) if not user
         user.updateDocument req.body
         , (err, user) ->
           return next(err) if err
-          return res.json(200, { ok: true, user: user })
+          return res.json(200, { ok: true, message: 'User profile updated.', user: user })
 
       return
   res.json(403, {}) # ??

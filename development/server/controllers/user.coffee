@@ -54,9 +54,9 @@ GET /current/
 ###
 exports.isLoggedIn = (req, res, next) ->
   if req.isAuthenticated()
-    res.json(200, {"user": req.user})
+    res.json(200, { ok: true, user: req.user })
   else
-    res.json(403, {})
+    res.json(403, { ok: false })
 
 ###
 POST /signout/
@@ -64,7 +64,7 @@ Log out.
 ###
 exports.logout = (req, res) ->
   req.logout()
-  res.json(200, {"message": "Logged out"})
+  res.json(200, { ok: true, message: "Signed out" })
   return
 
 

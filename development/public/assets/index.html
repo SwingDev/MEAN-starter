@@ -2,23 +2,29 @@
 
 <html ng-app="MEAN">
 
-    <head>
-        <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8">
 
-        <title></title>
+    <title></title>
 
-        <link rel="stylesheet" type="text/css" href="styles/vendor.css">
-        <link rel="stylesheet" type="text/css" href="styles/site.css">
-    </head>
+    <link rel="stylesheet" type="text/css" href="styles/vendor.css">
+    <link rel="stylesheet" type="text/css" href="styles/site.css">
+  </head>
 
-    <body>
+  <body>
 
-        <main class="container" ui-view="main"></main>
+    <!-- Alerts -->
+    <div class="container" ng-controller="AlertController">
+        <alert ng-repeat="alert in AlertService.alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.message}}</alert>
+    </div><!-- /end Alerts -->
 
-        <!-- JavaScript includes -->
-        <script type="text/javascript" src="scripts/vendor.js"></script>
-        <script type="text/javascript" src="scripts/site.js"></script>
-        <!-- /end JavaScript includes -->
-    </body>
+    <!-- Content -->
+    <main class="container" ui-view="main"></main><!-- /end Content -->
+
+    <!-- JavaScript includes -->
+    <script type="text/javascript" src="scripts/vendor.js"></script>
+    <script type="text/javascript" src="scripts/site.js"></script>
+    <!-- /end JavaScript includes -->
+  </body>
 
 </html>

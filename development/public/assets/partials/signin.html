@@ -1,23 +1,26 @@
 <div class="row">
-    <div class="col-xs-4 col-xs-offset-4">
+  <div class="col-xs-4 col-xs-offset-4">
 
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h1 class="panel-title">Sign In</h1>
-            </div>
-            <div class="panel-body">
-                <form name="signInForm" role="form">
-                    <div class="form-group">
-                        <input type="email" class="form-control" ng-model="signInForm.user.email" placeholder="E-mail" required autofocus>
-                    </div>
-                    <div class="form-group">
-                        <input type="password" class="form-control" ng-model="signInForm.user.password" placeholder="Password" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary" ng-click="signIn()">Sign In</button>
-                    <a class="btn btn-link" ui-sref="forgotten-password">Forgotten password</a>
-                </form>
-            </div>
-        </div>
-
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h1 class="panel-title">Sign In</h1>
+      </div>
+      <div class="panel-body">
+        <form name="signInForm" role="form" novalidate>
+          <div class="form-group" ng-class="{'has-error':signInForm.email.$invalid && !signInForm.email.$pristine}">
+            <input type="email" class="form-control" name="email" ng-model="signInForm.user.email" placeholder="E-mail" required autofocus>
+            <span class="help-block" ng-show="signInForm.email.$error.required && !signInForm.email.$pristine">E-mail address is required.</span>
+            <span class="help-block" ng-show="!signInForm.email.$valid && !signInForm.email.$pristine">Enter a valid email.</span>
+          </div>
+          <div class="form-group" ng-class="{'has-error':signInForm.password.$invalid && !signInForm.password.$pristine}">
+            <input type="password" class="form-control" name="password" ng-model="signInForm.user.password" placeholder="Password" required>
+            <span class="help-block" ng-show="signInForm.password.$error.required && !signInForm.password.$pristine">Password is required.</span>
+          </div>
+          <button type="submit" class="btn btn-primary" ng-click="signIn()">Sign In</button>
+          <a class="btn btn-link" ui-sref="forgotten-password">Forgotten password</a>
+        </form>
+      </div>
     </div>
+
+  </div>
 </div>

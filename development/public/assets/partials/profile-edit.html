@@ -1,0 +1,39 @@
+<div class="row">
+  <div class="col-xs-4 col-xs-offset-4">
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h1 class="panel-title">Profile edit</h1>
+      </div>
+      <div class="panel-body">
+        <form name="profileEditForm" role="form" novalidate>
+          <div class="form-group">
+            <input type="url" class="form-control" ng-model="profileEditForm.user.profile.picture" placeholder="Picture URL">
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control" ng-model="profileEditForm.user.profile.name" placeholder="Name">
+          </div>
+          <div class="form-group">
+            <input type="email" class="form-control" ng-model="profileEditForm.user.email" placeholder="E-mail" required disabled>
+          </div>
+          <div class="form-group" ng-class="{'has-error': profileEditForm.website.$invalid && !profileEditForm.website.$pristine}">
+            <input type="url" class="form-control" name="website" ng-model="profileEditForm.user.profile.website" placeholder="Website">
+            <span class="help-block" ng-show="!profileEditForm.website.$valid && !profileEditForm.website.$pristine">Enter a valid URL.</span>
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control" ng-model="profileEditForm.user.profile.location" placeholder="Location">
+          </div>
+          <div class="form-group">
+            <select ng-model="profileEditForm.user.profile.gender" class="form-control">
+              <option value="">Gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary" ng-click="updateUser()">Save</button>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -50,7 +50,7 @@ You can always modify your user object.
 If you have isAdmin = true, you can modify all users' objects.
 ###
 router.get('/:email', userController.getUser)
-router.patch('/:email', userController.patchUser)
+router.put('/:email', userController.patchUser)
 router.delete('/:email', userController.deleteUser)
 
 

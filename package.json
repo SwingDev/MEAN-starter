@@ -31,7 +31,7 @@
     "lodash": "^2.4.1",
     "lusca": "^1.0.0",
     "method-override": "^2.0.1",
-    "mongoose": "^3.8.12",
+    "mongoose": "3.8.12",
     "morgan": "^1.1.1",
     "nodemailer": "^0.6.5",
     "passport": "^0.2.0",

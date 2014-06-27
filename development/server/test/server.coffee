@@ -113,7 +113,7 @@ describe "Changing user data", ->
     return
 
   it "New user should be able to change profile data", (done) ->
-    agent.put("/api/user/" + user_data1.email + "/")
+    agent.patch("/api/user/" + user_data1.email + "/")
         .send({"profile": {"gender": "male"}})
         .expect 200
         .end (err, res) ->
@@ -122,13 +122,13 @@ describe "Changing user data", ->
     return
 
   it "New user shouldn't be able to make himself admin", (done) ->
-    agent.put("/api/user/" + user_data1.email + "/")
+    agent.patch("/api/user/" + user_data1.email + "/")
          .send({"isAdmin": true})
          .expect 403, done
     return
 
   it "New user shouldn't be able to add new keys to model", (done) ->
-    agent.put("/api/user/" + user_data1.email + "/")
+    agent.patch("/api/user/" + user_data1.email + "/")
         .send({"new_key": "new_key"})
         .expect 200
         .end (err, res) ->
@@ -137,7 +137,7 @@ describe "Changing user data", ->
     return
 
   it "New user should be able to change password", (done) ->
-    agent.put("/api/user/" + user_data1.email + "/")
+    agent.patch("/api/user/" + user_data1.email + "/")
         .send({"password": "new_password"})
         .expect 200
         .end (err, res) ->
@@ -167,7 +167,7 @@ describe "Changing user data", ->
         .expect 200
         .end (err, res) ->
           done(err) if err
-          agent.put("/api/user/" + user_data2.email + "/")
+          agent.patch("/api/user/" + user_data2.email + "/")
           .send({"profile.gender": "female"})
           .expect 403, done
     return

@@ -2,7 +2,6 @@ _ = require("lodash")
 passport = require("passport")
 LocalStrategy = require("passport-local").Strategy
 User = require("../models/User")
-secrets = require("./secrets")
 
 passport.serializeUser (user, done) ->
   done null, user.id

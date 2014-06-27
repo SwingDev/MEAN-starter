@@ -32,7 +32,6 @@ homeController = require("./controllers/home")
 ###
 API keys and Passport configuration.
 ###
-secrets        = require("./config/secrets")
 config         = require("./config/config")
 passportConf   = require("./config/passport")
 
@@ -79,7 +78,7 @@ app.use expressValidator()
 app.use methodOverride()
 app.use cookieParser()
 app.use session(
-  secret: secrets.sessionSecret
+  secret: config.sessionSecret
   store: new MongoStore(
     url: config.db
     auto_reconnect: true

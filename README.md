@@ -42,3 +42,10 @@ Differences from express-user-couchdb:
 
 ### Brief summary of API methods
 Go to `routes/user.coffee` and look at the comments. You will probably have to change stuff in passwor reset controller, to match your domain, port, templates and frontend url schema.
+
+## Configuring
+All configs should be imported from from `config/config` file. 
+The file imports config from other files in following order (config in later files will overwrite config from previous files):
+* `config/env/all` - store your general config there
+* `config/env/[dev|production|staging|test]` - store config specific for environment there. The environment is chosen based on value of `NODE_EVN` process env variable. 
+* `config/secrets` - this file should not be tracking on git and you should keep all password and secret API keys there. 

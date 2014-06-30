@@ -16,21 +16,30 @@ module.controller 'AuthController', ($scope, $state, AuthService, AlertService) 
             $scope.AlertService.add 'success', data.message
             return
           .error (data) ->
-            $scope.signUpForm.user.password = ''
-            $scope.signUpForm.user.password_confirmation = ''
-            $scope.signUpForm.password.$pristine = true
-            $scope.signUpForm.password_confirmation.$pristine = true
+            if $scope.signUpForm.user?
+              $scope.signUpForm.user.password = ''
+              $scope.signUpForm.password.$pristine = true
+              $scope.signUpForm.user.password_confirmation = ''
+              $scope.signUpForm.password_confirmation.$pristine = true
             $scope.AlertService.add 'danger', data.message
+            if data.errors?
+              $scope.signUpForm.validationErrors = []
+              angular.forEach data.errors, (value, key) ->
+                if $scope.signUpForm.validationErrors[value.param] is undefined || $scope.signUpForm.validationErrors[value.param] is null
+                  $scope.signUpForm.validationErrors[value.param] = []
+                $scope.signUpForm.validationErrors[value.param].push {message: value.msg}
+                return
             return
       else
         $scope.signUpForm.password_confirmation.match = false
     else
-      if $scope.signUpForm.$pristine
+      if $scope.signUpForm.email.$pristine || $scope.signUpForm.password.$pristine || $scope.signUpForm.password_confirmation.$pristine
         $scope.AlertService.add 'danger', 'Please enter e-mail and password.'
-        $scope.signUpForm.user.password = ''
-        $scope.signUpForm.user.password_confirmation = ''
-        $scope.signUpForm.password.$pristine = true
-        $scope.signUpForm.password_confirmation.$pristine = true
+        if $scope.signUpForm.user?
+          $scope.signUpForm.user.password = ''
+          $scope.signUpForm.user.password_confirmation = ''
+          $scope.signUpForm.password.$pristine = true
+          $scope.signUpForm.password_confirmation.$pristine = true
 
     return
 
@@ -43,9 +52,17 @@ module.controller 'AuthController', ($scope, $state, AuthService, AlertService) 
           $scope.AlertService.add 'success', data.message
           return
         .error (data) ->
-          $scope.signInForm.user.password = ''
+          if $scope.signInForm.user?
+            $scope.signInForm.user.password = ''
           $scope.signInForm.password.$pristine = true
           $scope.AlertService.add 'danger', data.message
+          if data.errors?
+            $scope.signInForm.validationErrors = []
+            angular.forEach data.errors, (value, key) ->
+              if $scope.signInForm.validationErrors[value.param] is undefined || $scope.signInForm.validationErrors[value.param] is null
+                $scope.signInForm.validationErrors[value.param] = []
+              $scope.signInForm.validationErrors[value.param].push {message: value.msg}
+              return
           return
     else
       if $scope.signInForm.$pristine
@@ -66,6 +83,13 @@ module.controller 'AuthController', ($scope, $state, AuthService, AlertService) 
           return
         .error (data) ->
           $scope.AlertService.add 'danger', data.message
+          if data.errors?
+            $scope.forgottenPasswordForm.validationErrors = []
+            angular.forEach data.errors, (value, key) ->
+              if $scope.forgottenPasswordForm.validationErrors[value.param] is undefined || $scope.forgottenPasswordForm.validationErrors[value.param] is null
+                $scope.forgottenPasswordForm.validationErrors[value.param] = []
+              $scope.forgottenPasswordForm.validationErrors[value.param].push {message: value.msg}
+              return
           return
     else
       if $scope.forgottenPasswordForm.$pristine
@@ -76,20 +100,30 @@ module.controller 'AuthController', ($scope, $state, AuthService, AlertService) 
   $scope.resetPassword = () ->
 
     if $scope.resetPasswordForm.$valid
-      if $scope.resetPasswordForm.user.password is $scope.resetPasswordForm.user.password_confirmation
-        $scope.resetPasswordForm.user.token = $state.params.forgotCode
+      if $scope.resetPasswordForm.user?
+        if $scope.resetPasswordForm.user.password is $scope.resetPasswordForm.user.password_confirmation
+          $scope.resetPasswordForm.user.token = $state.params.forgotCode
 
-        $scope.AuthService.resetPassword $scope.resetPasswordForm.user
-          .success (data) ->
-            $scope.AlertService.add 'success', data.message
-            $scope.resetPasswordForm.user = {}
-            return
-          .error (data) ->
-            $scope.AlertService.add 'danger', data.message
-            $scope.resetPasswordForm.user = {}
-            return
+          $scope.AuthService.resetPassword $scope.resetPasswordForm.user
+            .success (data) ->
+              $scope.AlertService.add 'success', data.message
+              $scope.resetPasswordForm.user = {}
+              return
+            .error (data) ->
+              $scope.AlertService.add 'danger', data.message
+              if data.errors?
+                $scope.resetPasswordForm.validationErrors = []
+                angular.forEach data.errors, (value, key) ->
+                  if $scope.resetPasswordForm.validationErrors[value.param] is undefined || $scope.resetPasswordForm.validationErrors[value.param] is null
+                    $scope.resetPasswordForm.validationErrors[value.param] = []
+                  $scope.resetPasswordForm.validationErrors[value.param].push {message: value.msg}
+                  return
+              $scope.resetPasswordForm.user = {}
+              return
+        else
+          $scope.resetPasswordForm.password_confirmation.match = false
       else
-        $scope.resetPasswordForm.password_confirmation.match = false
+        $scope.AlertService.add 'danger', 'Please enter password.'
     else
       if $scope.resetPasswordForm.$pristine
         $scope.AlertService.add 'danger', 'Please enter password.'

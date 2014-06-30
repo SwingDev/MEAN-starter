@@ -10,19 +10,22 @@
           <div class="form-group">
             <input type="text" class="form-control" ng-model="signUpForm.user.name" placeholder="Name" autofocus>
           </div>
-          <div class="form-group" ng-class="{'has-error':signUpForm.email.$invalid && !signUpForm.email.$pristine}">
+          <div class="form-group" ng-class="{'has-error':signUpForm.email.$invalid && !signUpForm.email.$pristine || signUpForm.validationErrors['email']}">
             <input type="email" class="form-control" name="email" ng-model="signUpForm.user.email" placeholder="E-mail" required>
             <span class="help-block" ng-show="signUpForm.email.$error.required && !signUpForm.email.$pristine">E-mail address is required.</span>
             <span class="help-block" ng-show="!signUpForm.email.$valid && !signUpForm.email.$pristine">Enter a valid email.</span>
+            <span class="help-block" ng-show="signUpForm.validationErrors['email']" ng-repeat="error in signUpForm.validationErrors['email']">{{error.message}}</span>
           </div>
-          <div class="form-group" ng-class="{'has-error':signUpForm.password.$invalid && !signUpForm.password.$pristine}">
+          <div class="form-group" ng-class="{'has-error':signUpForm.password.$invalid && !signUpForm.password.$pristine || signUpForm.validationErrors['password']}">
             <input type="password" class="form-control" name="password" ng-model="signUpForm.user.password" placeholder="Password" required>
             <span class="help-block" ng-show="signUpForm.password.$error.required && !signUpForm.password.$pristine">Password is required.</span>
+            <span class="help-block" ng-show="signUpForm.validationErrors['password']" ng-repeat="error in signUpForm.validationErrors['password']">{{error.message}}</span>
           </div>
-          <div class="form-group" ng-class="{'has-error':(signUpForm.password_confirmation.$invalid && !signUpForm.password_confirmation.$pristine) || (signUpForm.password_confirmation.match === false && !signUpForm.password_confirmation.$pristine)}">
+          <div class="form-group" ng-class="{'has-error':(signUpForm.password_confirmation.$invalid && !signUpForm.password_confirmation.$pristine) || (signUpForm.password_confirmation.match === false && !signUpForm.password_confirmation.$pristine) || (signUpForm.validationErrors['password_confirmation'])}">
             <input type="password" class="form-control" name="password_confirmation" ng-model="signUpForm.user.password_confirmation" placeholder="Password confirmation" required>
             <span class="help-block" ng-show="signUpForm.password_confirmation.$error.required && !signUpForm.password_confirmation.$pristine">Password confirmation is required.</span>
             <span class="help-block" ng-show="signUpForm.password_confirmation.match === false && !signUpForm.password_confirmation.$pristine">Password confirmation is not match.</span>
+            <span class="help-block" ng-show="signUpForm.validationErrors['password_confirmation']" ng-repeat="error in signUpForm.validationErrors['password_confirmation']">{{error.message}}</span>
           </div>
           <button type="submit" class="btn btn-primary" ng-click="signUp()">Sign Up</button>
         </form>

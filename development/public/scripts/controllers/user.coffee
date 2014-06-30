@@ -44,6 +44,13 @@ module.controller 'UserController', ($scope, $state, UserService, AuthService, A
           return
         .error (data) ->
           $scope.AlertService.add 'danger', data.message
+          if data.errors?
+            $scope.profileEditForm.validationErrors = []
+            angular.forEach data.errors, (value, key) ->
+              if $scope.profileEditForm.validationErrors[value.param] is undefined || $scope.profileEditForm.validationErrors[value.param] is null
+                $scope.profileEditForm.validationErrors[value.param] = []
+              $scope.profileEditForm.validationErrors[value.param].push {message: value.msg}
+              return
           return
     else
       $scope.AlertService.add 'danger', 'Invalid form data.'

@@ -7,14 +7,16 @@
       </div>
       <div class="panel-body">
         <form name="signInForm" role="form" novalidate>
-          <div class="form-group" ng-class="{'has-error':signInForm.email.$invalid && !signInForm.email.$pristine}">
+          <div class="form-group" ng-class="{'has-error':signInForm.email.$invalid && !signInForm.email.$pristine || signInForm.validationErrors['email']}">
             <input type="email" class="form-control" name="email" ng-model="signInForm.user.email" placeholder="E-mail" required autofocus>
-            <span class="help-block" ng-show="signInForm.email.$error.required && !signInForm.email.$pristine">E-mail address is required.</span>
-            <span class="help-block" ng-show="!signInForm.email.$valid && !signInForm.email.$pristine">Enter a valid email.</span>
+            <span class="help-block" ng-show="signInForm.email.$error.required && !signInForm.email.$pristine">Email is not valid</span>
+            <span class="help-block" ng-show="!signInForm.email.$valid && !signInForm.email.$pristine">Email is not valid</span>
+            <span class="help-block" ng-show="signInForm.validationErrors['email']" ng-repeat="error in signInForm.validationErrors['email']">{{error.message}}</span>
           </div>
-          <div class="form-group" ng-class="{'has-error':signInForm.password.$invalid && !signInForm.password.$pristine}">
+          <div class="form-group" ng-class="{'has-error':signInForm.password.$invalid && !signInForm.password.$pristine || signInForm.validationErrors['password']}">
             <input type="password" class="form-control" name="password" ng-model="signInForm.user.password" placeholder="Password" required>
-            <span class="help-block" ng-show="signInForm.password.$error.required && !signInForm.password.$pristine">Password is required.</span>
+            <span class="help-block" ng-show="signInForm.password.$error.required && !signInForm.password.$pristine">Password cannot be blank</span>
+            <span class="help-block" ng-show="signInForm.validationErrors['password']" ng-repeat="error in signInForm.validationErrors['password']">{{error.message}}</span>
           </div>
           <button type="submit" class="btn btn-primary" ng-click="signIn()">Sign In</button>
           <a class="btn btn-link" ui-sref="forgotten-password">Forgotten password</a>

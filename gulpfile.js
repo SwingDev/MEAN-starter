@@ -6,7 +6,7 @@ var gulp       = require('gulp');
     coffeelint = require('gulp-coffeelint');
     plumber    = require('gulp-plumber');
 
-var onError = function (err) {  
+var onError = function (err) {
   gutil.beep();
   gutil.log(err);
 };

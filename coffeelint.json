@@ -26,7 +26,7 @@
   },
 
   "no_throwing_strings" : {
-    "level" : "warn"
+    "level" : "ignore"
   },
 
   "no_backticks": {

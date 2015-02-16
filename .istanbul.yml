@@ -1,6 +1,0 @@
-reporting:
-    print: summary
-    reports:
-        - lcov
-        - cobertura
-    dir: ./.jenkins/reports
